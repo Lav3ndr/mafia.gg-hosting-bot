@@ -1,3 +1,5 @@
+// this file contains the lower-level code which interacts with the browser
+// forked by Lavender - original code and and lots of help comes from aRandomZy
 package mafia.gg.bot;
  
 import java.util.ArrayList;
@@ -94,7 +96,9 @@ public class MafiaSession {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         List<String >creds = new ArrayList<String>();
         try {
-            File myObj = new File("credentials.txt");
+        	//file containing username and password of bot account
+        	//first line username, second line password
+            File myObj = new File("credentials.txt"); 
             Scanner myReader = new Scanner(myObj);
             for (int i = 0; i < 2; i++) {
               String data = myReader.nextLine();

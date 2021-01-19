@@ -1,3 +1,5 @@
+// this file contains the main loop and upper level functionality
+// forked by Lavender - original code and and lots of help comes from aRandomZy
 package mafia.gg.bot;
  
 import java.util.ArrayList;
@@ -194,7 +196,7 @@ public class App {
 			displayInfo( command );
 		}
 		else if (command.equalsIgnoreCase(".credits")) {
-			obj.sendMessage( "This bot was programmed in Java by Lavender (Lavender#8704 on Discord), though the original code was written and given to him by someone else. It uses a library called Selenium (https://www.selenium.dev/) to open a browser and interact with it by referencing the source html.");			
+			obj.sendMessage( "This bot was programmed in Java by Lavender (Lavender#8704 on Discord), though the original code was written and given to him by someone else. It uses a library called Selenium (https://www.selenium.dev/) to open a browser and interact with it by referencing the source html. Poorly-documented source code is available on Github - contact Lavender if interested.");			
 		}
 		else if (command.equalsIgnoreCase(".garbageman")) {
 			obj.sendMessage("gotta figure out how to get off my butt and work on my real side projects");
