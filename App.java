@@ -29,6 +29,7 @@ public class App {
 	//private static boolean daystart = false;
 	private static boolean hiddenSetup = false;
 	private static String currentSetup = "conplan";
+	//private static int setupSize = 0;
 	private static String autoHostText = " (Lavenbot)";//" (autohosted)";
 	private static boolean waiting = false;
 	private static int votethreshold = 3;
@@ -91,7 +92,32 @@ public class App {
         votes.put("jani", new ArrayList<String>());
         votes.put("abc", new ArrayList<String>());
         votes.put("how2mm", new ArrayList<String>());
-        votes.put("triplecamp", new ArrayList<String>());
+        votes.put("triplecamp", new ArrayList<String>());		
+		
+        votes.put("stc", new ArrayList<String>());
+        votes.put("camerashy", new ArrayList<String>());
+		
+        votes.put("congress", new ArrayList<String>());
+        votes.put("ascension", new ArrayList<String>());
+        votes.put("sweetdreams", new ArrayList<String>());
+        votes.put("gnightless", new ArrayList<String>());
+        votes.put("voltronmicro", new ArrayList<String>());
+        votes.put("oneshotcops", new ArrayList<String>());
+        votes.put("multemplar", new ArrayList<String>());
+        votes.put("uncertainty", new ArrayList<String>());
+        votes.put("powervilly13", new ArrayList<String>());
+        votes.put("whiteflag", new ArrayList<String>());
+        votes.put("circus", new ArrayList<String>());
+        votes.put("solobombs", new ArrayList<String>());
+        votes.put("fatedduo", new ArrayList<String>());
+        votes.put("ibern", new ArrayList<String>());
+        votes.put("lizardrroff", new ArrayList<String>());
+        votes.put("masonrelay", new ArrayList<String>());
+        votes.put("powermillers", new ArrayList<String>());
+        votes.put("shobombs", new ArrayList<String>());
+        votes.put("vip", new ArrayList<String>());
+        votes.put("basic20", new ArrayList<String>());
+        votes.put("pie25", new ArrayList<String>());
         
         votes.put("superposition", new ArrayList<String>());
         votes.put("carbon14", new ArrayList<String>());
@@ -117,7 +143,7 @@ public class App {
 	public String castVote( String stp, String usr) {
 		stp = stp.toLowerCase();
 		if (!votes.containsKey( stp )) {
-			return "'" +stp + "' is not a valid setup code.";
+			return "'" +stp + "' is not a valid setup code, "+usr+"! Type '.help' to see available setup codes.";
 		}
 		else if (votes.get( stp ).contains(usr) ) {
 			return "You have already voted for "+ stp + ", "+ usr +"!";
@@ -177,9 +203,23 @@ public class App {
 				return;
 			}
 			obj.afkCheck();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}			
 			obj.startGame();
 			obj.sendMessage("Thanks for playing everyone! Signing off...");
 			throw new Exception( "Terminating execution.");
+		}
+		else if (command.startsWith(".kick ") && authorized) {
+			command = command.replace(".kick ", "");
+			//obj.sendMessage( "Kicking user: " + command);
+			if ( obj.kick( command ) ) {
+				obj.sendMessage( command + " has been kicked.");
+			}
+			else {
+				obj.sendMessage( "Couldn't kick " + command + "." );
+			}
 		}
 		else if (command.equals(".impatient")) {
 			int onlyneed = obj.totalPlayers() - obj.playerdUp();
@@ -205,7 +245,7 @@ public class App {
 			obj.sendMessage(".deck Love Live");
 		}
 		else if (command.equalsIgnoreCase(".auryxx")) {
-			obj.sendMessage(".deck Love Live");
+			obj.sendMessage(".xinde");
 		}
 		else if (command.equalsIgnoreCase(".hockeyfan123")) {
 			obj.sendMessage("doesn't even like hockey");
@@ -219,6 +259,49 @@ public class App {
 		else if (command.equalsIgnoreCase(".1612")) {
 			obj.sendMessage("wholesome <3");
 		}
+		else if (command.equalsIgnoreCase(".khs131")) {
+			obj.sendMessage("good player");
+		}
+		else if (command.equalsIgnoreCase(".stimilant")) {
+			obj.sendMessage("plays conplan with the wrong settings but i forgive him");
+		}
+		else if (command.equalsIgnoreCase(".ericmw")) {
+			obj.sendMessage("went out for milk and never came back");
+		}
+		else if (command.equalsIgnoreCase(".reshoe7777777")) {
+			obj.sendMessage("kangaroo emoji");
+		}
+		else if (command.equalsIgnoreCase(".hitoshisuki")) {
+			obj.sendMessage("always town");
+		}
+		else if (command.equalsIgnoreCase(".chiccpea")) {
+			obj.sendMessage("chick emoji can emoji");
+		}
+		else if (command.equalsIgnoreCase(".wangalang")) {
+			obj.sendMessage("wang emoji");
+		}
+		else if (command.equalsIgnoreCase(".getdropkicked")) {
+			obj.sendMessage("gdk pog");
+		}
+		else if (command.equalsIgnoreCase(".bruhmoments")) {
+			obj.sendMessage("taught me everything i know");
+		}
+		else if (command.equalsIgnoreCase(".michael")) {
+			obj.sendMessage("i miss michael");
+		}
+		else if (command.equalsIgnoreCase(".akiak")) {
+			obj.sendMessage("i miss akiak");
+		}
+		else if (command.equalsIgnoreCase(".iruncursebidoof")) {
+			obj.sendMessage("legend");
+		}
+		else if (command.equalsIgnoreCase(".meteornate")) {
+			obj.sendMessage("meteor emoji nate emoji");
+		}
+		else if (command.equalsIgnoreCase(".froggo43")) {
+			obj.sendMessage("dm me froggo memes i can't think of any");
+		}
+		
 		else if (command.equals(".time")) {
 			int toStart = toStart();
 			if ( toStart != 0 ){
@@ -284,7 +367,7 @@ public class App {
 				incChanges();
 			}
 			else {
-				obj.sendMessage( "Unable to set deck. Deck selection is case-sensitive and must contain the exact string specified." );
+				obj.sendMessage( "Unable to process deck request from "+user+". Deck selection is case-sensitive and must contain the exact string specified." );
 			}			
 		}
 		//else if (command.equals(".playerUp"))
@@ -410,6 +493,7 @@ public class App {
 					rroff = false;
 				}
 				obj.setSetup(MafiaSession.DETHY);
+				//setupSize = 5;
 				displayInfo( currentSetup );
 			} else if (command.equalsIgnoreCase("conplan+")) {
 				currentSetup = "conplan+";
@@ -425,6 +509,7 @@ public class App {
 					rroff = true;
 				}
 				obj.setSetup(MafiaSession.CONPLAN_6);
+				//setupSize=6;
 				displayInfo( currentSetup );
 			} else if (command.equalsIgnoreCase("lovers")) {
 				currentSetup = "lovers";
@@ -440,7 +525,44 @@ public class App {
 					rroff = false;
 				}
 				obj.setSetup(MafiaSession.LOVERS);
+				//setupSize = 6;
 				displayInfo( currentSetup );
+				
+			} else if (command.equalsIgnoreCase("stc")) {
+				currentSetup = "stc";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Shrink the Cult"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}
+				obj.setSetup(MafiaSession.STC);
+				//setupSize = 6;
+				displayInfo( currentSetup );
+				
+			} else if (command.equalsIgnoreCase("camerashy")) {
+				currentSetup = "camerashy";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("Camera Shy"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( !rroff ) {
+					obj.rroffToggle();
+					rroff = true;
+				}
+				obj.setSetup(MafiaSession.CAMERASHY);
+				// need to set punish randomly according to the site
+				//setupSize = 6;
+				displayInfo( currentSetup );
+				
 			} else if (command.equalsIgnoreCase("gnh")) {
 				currentSetup = "gnh";
 				obj.nightStart();
@@ -591,14 +713,330 @@ public class App {
 				}				
 				obj.setSetup(MafiaSession.TRIPLECAMP);
 				displayInfo( currentSetup );
-			} else if (command.equalsIgnoreCase("cons8")) {
-				obj.setSetup(MafiaSession.CONSIGLIERE_8);
-			} else if (command.equalsIgnoreCase("cons10")) {
-				obj.setSetup(MafiaSession.CONSIGLIERE_10);
-			} else if (command.equalsIgnoreCase("12m")) {
-				obj.setSetup(MafiaSession.DEF_MAF_12);
-			} else if (command.equalsIgnoreCase("18m")) {
-				obj.setSetup(MafiaSession.DEF_MAF_18);
+			
+			} else if (command.equalsIgnoreCase("congress")) {
+				currentSetup = "congress";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Congress"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.CONGRESS);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("ascension")) {
+				currentSetup = "ascension";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("Ascension"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.ASCENSION);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("sweetdreams")) {
+				currentSetup = "sweetdreams";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Sweet Dreams"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.SWEETDREAMS);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("gnightless")) {
+				currentSetup = "gnightless";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Gnightless"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.GNIGHTLESS);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("voltronmicro")) {
+				currentSetup = "voltronmicro";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("V_ltr_n μ"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.V_LTR_N);
+				displayInfo( currentSetup );	
+			} else if (command.equalsIgnoreCase("oneshotcops")) {
+				currentSetup = "oneshotcops";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("One Shot Cops"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.ONESHOTCOPS);
+				displayInfo( currentSetup );	
+			} else if (command.equalsIgnoreCase("multemplar")) {
+				currentSetup = "multemplar";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Multemplar"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.MULTEMPLAR);
+				displayInfo( currentSetup );	
+			} else if (command.equalsIgnoreCase("uncertainty")) {
+				currentSetup = "uncertainty";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Power Villy 13"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.UNCERTAINTY);
+				displayInfo( currentSetup );	
+			} else if (command.equalsIgnoreCase("powervilly13")) {
+				currentSetup = "powervilly13";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Power Villy 13"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.POWERVILLY);
+				displayInfo( currentSetup );	
+			} else if (command.equalsIgnoreCase("whiteflag")) {
+				currentSetup = "whiteflag";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("White Flag"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.WHITEFLAG);
+				displayInfo( currentSetup );	
+			} else if (command.equalsIgnoreCase("circus")) {
+				currentSetup = "circus";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("Circus"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.CIRCUS);
+				displayInfo( currentSetup );	
+			} else if (command.equalsIgnoreCase("solobombs")) {
+				currentSetup = "solobombs";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("Solobombs"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.SOLOBOMBS);
+				displayInfo( currentSetup );				
+			} else if (command.equalsIgnoreCase("fatedduo")) {
+				currentSetup = "fatedduo";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Fated Duo"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.FATEDDUO);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("ibern")) {
+				currentSetup = "ibern";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("iBern"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.IBERN);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("lizardrroff")) {
+				currentSetup = "lizardrroff";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Lizard RR Off"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( !rroff ) {
+					obj.rroffToggle();
+					rroff = true;
+				}				
+				obj.setSetup(MafiaSession.LIZARDRROFF);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("masonrelay")) {
+				currentSetup = "masonrelay";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Mason Relay"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.MASONRELAY);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("powermillers")) {
+				currentSetup = "powermillers";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Power Millers"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.SHOBOMBS);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("shobombs")) {
+				currentSetup = "shobombs";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Shobombs"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.SHOBOMBS);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("vip")) {
+				currentSetup = "vip";
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("VIP"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.VIP);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("basic20")) {
+				currentSetup = "basic20";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Basic 20"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.BASIC20);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("pie25")) {
+				currentSetup = "triplecamp";
+				obj.nightStart();
+				obj.majOn();
+				obj.changeRoomName("Pie25"+autoHostText);
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+					hiddenSetup = false;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}				
+				obj.setSetup(MafiaSession.PIE25);
+				displayInfo( currentSetup );
+			//} //else if (command.equalsIgnoreCase("cons8")) {
+			//	obj.setSetup(MafiaSession.CONSIGLIERE_8);
+			//} //else if (command.equalsIgnoreCase("cons10")) {
+			//	obj.setSetup(MafiaSession.CONSIGLIERE_10);
+			//} //else if (command.equalsIgnoreCase("12m")) {
+			//	obj.setSetup(MafiaSession.DEF_MAF_12);
+			//} //else if (command.equalsIgnoreCase("18m")) {
+			//	obj.setSetup(MafiaSession.DEF_MAF_18);
 			}  else if (command.equalsIgnoreCase( "superposition" )) {
 				currentSetup = "superposition";
 				obj.dayStart();
@@ -718,7 +1156,7 @@ public class App {
 			obj.afkCheck();
 		}
 		else {
-			obj.sendMessage("'"+command+"' is not a recognized command.");
+			obj.sendMessage("'"+command+"' is not a recognized command, or you are not authorized to use it.");
 		}
 		try {
 			Thread.sleep(100);
@@ -730,8 +1168,9 @@ public class App {
 	public void intro() {
 		obj.sendMessage(
 				"This is a hosting bot. I will do an afk check when the room fills and start after the afk check. I will become a player to boost but spectate before starting. Type '.help' to see available setups and other commands." );
-		help();//try {
-		//	Thread.sleep(15000);
+		help();
+		//try {
+		//	Thread.sleep(1000);
 		//} catch (InterruptedException e) {
 		//}
 	}
@@ -742,7 +1181,9 @@ public class App {
 //		obj.sendMessage(
 //				"Majority Codes - nm= Turned off, sm = Simple Majority, 2 = Two-Thirds Majority and 3 = Three-Quarters Majority");
 		//obj.sendMessage("Available Commands : .intro | .setDayTime [3-13] | .feedback [feedback] | .afkCheck");
-		obj.sendMessage("Use this syntax to vote for a setup: '.vote [setup code]' (e.g. '.vote pie7')   /\\/\\/\\   Open setup codes : consifom | dethy | conplan | conplan+ | lovers | pie7 | bootcamp | gnh | pie7+ | bootcamp+ | dnct | jani | abc | how2mm | triplecamp   /\\/\\/\\   Semi-open/closed setup codes : superposition | carbon14 | notnot | mafiajjani | sodium24   /\\/\\/\\   Try these commands, too! : .help | .info | .info [setup code] | .showvotes | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits");
+		obj.sendMessage( "Use this syntax to vote for a setup: '.vote [setup code]' (e.g. '.vote pie7')"  );
+		obj.sendMessage( "Open setup codes : consifom | dethy | conplan | conplan+ | lovers | stc | camerashy | pie7 | bootcamp | gnh | pie7+ | bootcamp+ | sweetdreams | gnightless | voltronmicro | dnct | jani | abc | ascension | how2mm | oneshotcops | triplecamp | multemplar | uncertainty | powervilly13 | whiteflag | circus | solobombs | fatedduo | ibern | lizardrroff | masonrelay | powermillers | shobombs | vip | congress | basic20 | pie25" );
+		obj.sendMessage( "Semi-open/closed setup codes : superposition | carbon14 | notnot | mafiajjani | sodium24   /\\/\\/\\   Try these commands, too! : .help | .info | .info [setup code] | .showvotes | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits");
 	}
 	
 	public void displayInfo( String cur ) {
@@ -765,6 +1206,15 @@ public class App {
 		else if (cur.equals( "conplan+") ) {
 			msg = msg + "5 Man Conplan +. Read about it here: https://mafiagg.fandom.com/wiki/5_Man_Conplan";
 		}
+		
+		else if (cur.equals( "stc") ) {
+			msg = msg + "Shrink the Cult. Read about it here: https://mafiagg.fandom.com/wiki/Shrink_the_Cult";
+		}
+		else if (cur.equals( "camerashy") ) {
+			msg = msg + "Camera Shy. Read about it here: https://mafiagg.fandom.com/wiki/Camera_Shy";
+		}
+		
+		
 		else if (cur.equals( "gnh") ) {
 			msg = msg + "Guns n Hookers. Read about it here: https://mafiagg.fandom.com/wiki/Guns_%26_Hookers";
 		}
@@ -796,6 +1246,70 @@ public class App {
 			msg = msg + "Triplecamp. Read about it here: https://mafiagg.fandom.com/wiki/Triplecamp";
 		}
 		
+		else if (cur.equals( "congress") ) {
+			msg = msg + "Congress. I'm supposed to warn you that reading the link is especially important for this one. Read about it here: https://mafiagg.fandom.com/wiki/Congress";
+		}
+		else if (cur.equals( "ascension") ) {
+			msg = msg + "Ascension. SPECIAL RULES: Jekylls must protect each other in a circle at night, if possible, and the first team to lose, wins. Read about it here: https://mafiagg.fandom.com/wiki/Ascension";
+		}
+		else if (cur.equals( "sweetdreams") ) {
+			msg = msg + "Sweet Dreams. Read about it here: https://mafiagg.fandom.com/wiki/Sweet_Dreams";
+		}
+		else if (cur.equals( "gnightless") ) {
+			msg = msg + "Gnightless. Read about it here: https://mafiagg.fandom.com/wiki/Gnightless";
+		}
+		else if (cur.equals( "voltronmicro") ) {
+			msg = msg + "V_ltr_n μ. Read about it here: https://mafiagg.fandom.com/wiki/V_ltr_n_%CE%BC";
+		}
+		else if (cur.equals( "oneshotcops") ) {
+			msg = msg + "One Shot Cops. Read about it here: https://mafiagg.fandom.com/wiki/One-Shot_Cops";
+		}
+		else if (cur.equals( "multemplar") ) {
+			msg = msg + "Multemplar. Read about it here: https://mafiagg.fandom.com/wiki/Multemplar";
+		}
+		else if (cur.equals( "uncertainty") ) {
+			msg = msg + "Uncertainty. Read about it here: https://mafiagg.fandom.com/wiki/Uncertainty";
+		}
+		else if (cur.equals( "powervilly13") ) {
+			msg = msg + "Power Villy 13. Read about it here: https://mafiagg.fandom.com/wiki/Power_Villy_13";
+		}
+		else if (cur.equals( "whiteflag") ) {
+			msg = msg + "White Flag. Read about it here: https://mafiagg.fandom.com/wiki/White_Flag_(Setup)";
+		}
+		else if (cur.equals( "circus") ) {
+			msg = msg + "Circus. Read about it here: hhttps://mafiagg.fandom.com/wiki/Circus";
+		}
+		else if (cur.equals( "solobombs") ) {
+			msg = msg + "Solobombs. Read about it here: https://mafiagg.fandom.com/wiki/Solobombs";
+		}
+		else if (cur.equals( "fatedduo") ) {
+			msg = msg + "Fated Duo. Read about it here: https://mafiagg.fandom.com/wiki/Fated_Duo";
+		}
+		else if (cur.equals( "ibern") ) {
+			msg = msg + "iBern. Read about it here: https://mafiagg.fandom.com/wiki/IBern";
+		}
+		else if (cur.equals( "lizardrroff") ) {
+			msg = msg + "Lizard RR Off. Read about it here: https://mafiagg.fandom.com/wiki/Lizard_RR_off";
+		}
+		else if (cur.equals( "masonrelay") ) {
+			msg = msg + "Mason Relay. Read about it here: https://mafiagg.fandom.com/wiki/Mason_Relay";
+		}
+		else if (cur.equals( "powermillers") ) {
+			msg = msg + "Power Millers. Read about it here: https://mafiagg.fandom.com/wiki/Power_Millers";
+		}
+		else if (cur.equals( "shobombs") ) {
+			msg = msg + "Shobombs. Read about it here: https://mafiagg.fandom.com/wiki/Shobombs";
+		}
+		else if (cur.equals( "vip") ) {
+			msg = msg + "VIP. Read about it here: https://mafiagg.fandom.com/wiki/VIP";
+		}
+		else if (cur.equals( "basic20") ) {
+			msg = msg + "Basic 20. Read about it here: https://mafiagg.fandom.com/wiki/Basic20";
+		}
+		else if (cur.equals( "pie25") ) {
+			msg = msg + "Pie 25. I have no hints for you. Coast until f3? idk";
+		}
+		
 		else if (cur.equals( "superposition") ) {
 			msg = msg + "Superposition. It is a semi-open setup with 8 possibilities. Read about the possibilities here: https://mafiagg.fandom.com/wiki/Superposition";
 		}
@@ -811,13 +1325,16 @@ public class App {
 		else if (cur.equals( "sodium24") ) {
 			msg = msg + "Sodium-24. It is a semi-open setup with 4 possibilities. Read about it here: https://mafiagg.fandom.com/wiki/Sodium-24";
 		}
+		
+		
+		
+		
+		
+		
 		obj.sendMessage(msg);
 	}
  
 	public static void main(String[] args) {
-		//App appObj = new App();
-		//String roonName = "hostbot";
-		//String roomName = "hostbot";
 		boolean firstTime = true;
 		boolean gameRunning = false;
 		while (true) {
@@ -837,89 +1354,44 @@ public class App {
 			lastInLine.add( "" );
 			
 			
-			
-			//List<String> chat = new ArrayList<String>();//App.obj.getChat();
-			//List<String> users = new ArrayList<String>();//App.obj.getUsername();
-			//if ( !firstTime ) {
-			//	System.out.println( "we made it farther");
-			//}
 			appObj.intro();
 			appObj.resetVotes();
 			appObj.hardResetTimer();
 			appObj.resetDeckChanges();
 			
-			//System.out.println( currentSetup );
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+			}
 			try {
 				appObj.queue(".setup " + currentSetup, auth.get( 0 ) );
 				appObj.queue(".time",  auth.get( 0 ) );
 			} catch (Exception e ) {
 				return;
 			}
-			//try {
-			//	obj.playerUp();
-			//} catch (Exception e ) {
-				
-			//}
-			// appObj.displayInfo( currentSetup );
-			//appObj.queue(".setDayTime 5");
-			//System.out.println("Welcome"); 
-			//appObj.queue(".setNightTime 1");		
-			//appObj.queue(".setMajority nm");
-			//appObj.queue(".roomName Automated Hosting");
-			// uncomment next line to always make games listed
+
 			if ( listed ){
 				obj.listToggle(); // always makes listed?
 			}
 			
 			long starttime = 0;
 			int patience = 15;
-			gameRunning = false;
+			//gameRunning = false;
 			while (true) {
 				if ( obj.tryHostNew() ) {
 					firstTime = false;
 					break;
 				}
-				if (gameRunning) {
+				if (obj.gameRunning() ) {
 					continue;
 				}
 				long curtime = System.nanoTime();
 				
-				//if (waiting) {
-				//	continue;
-				//}
-				
-				//Prioritize updating the command queue if there is still time on the clock.
-				//obj.updateChatSmart( chatQueue, lastRead );
-				//System.out.println( chatQueue );
-				//if ( chatQueue.size() > 0 && appObj.toStart() > 0 ) {
-				//	try {
-				//		lastRead = appObj.queueChat( chatQueue );
-				//	} catch ( Exception e ) {
-				//		e.printStackTrace();
-				//		System.out.println( "Failed successfully.");
-				//		return;
-				//	}					
-				//}
-				
-				//Prioritize updating the command queue if there is still time on the clock.
-				//int n = obj.updateChat(chat, users);
-				//if (n > 0 && appObj.toStart() > 0) {
-				//	try {
-				//		appObj.queueChat(chat, users, n);
-				//	} catch ( Exception e ) {
-				//		e.printStackTrace();
-				//		System.out.println( "Failed successfully.");
-				//		return;
-				//	}
-				//}
-
-
 				// Prioritize starting the game if there is no time on the clock.
 				// Do an afk check if the lobby is full.
 				if (obj.playerdUp() >= obj.totalPlayers() && !afk) {
 					try {
 						obj.playerDown();
-						//appObj.queue(".playerDown");
 					} catch (Exception e ) {
 						e.printStackTrace();
 						return;
@@ -943,13 +1415,26 @@ public class App {
 						}
 						else {
 							obj.sendMessage("GLHF! DON'T AFK!");
+							try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+							}
 							obj.startGame();
-							gameRunning = true;
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+							}
+							if ( !obj.gameRunning() ) {
+								obj.sendMessage("Someone unplayered. Let's try again...");
+							}
+							//gameRunning = true;
 						}						
-					} catch (Exception e) {
-						obj.unexpectedClose();
+					} catch (NoSuchElementException e) {
+					
 						e.printStackTrace();
-						obj.sendMessage("Nevermind, let's try again...");
+					} catch (Exception e) {
+						obj.sendMessage("Unexpected error. Let's try again...");
+						e.printStackTrace();
 					}
 				}
 				// Boost if more than patience seconds have passed and no one is playered up.
@@ -964,7 +1449,6 @@ public class App {
 				
 				// Update the command queue
 				obj.updateChatSmart( chatQueue, lastInLine );
-				//System.out.println( chatQueue );
 				if ( chatQueue.size() > 0 ) {
 					try {
 						lastInLine = appObj.popOne( chatQueue );
@@ -974,19 +1458,6 @@ public class App {
 						return;
 					}					
 				}
-				
-				// Update the command queue
-				//n = obj.updateChat(chat, users);
-				//if (n > 0 && appObj.toStart() == 0) {
-				//	try {
-				//		appObj.queueChat(chat, users, n);
-				//	} catch ( Exception e ) {
-				//		e.printStackTrace();
-				//		System.out.println( "Failed successfully.");
-				//		return;
-				//	}
-				//}
-				//System.out.println( "In main loop");
 			}
 		}
 	}
@@ -994,18 +1465,7 @@ public class App {
 	public List<String> popOne( List<List<String>> chat ) throws Exception {
 		int size = chat.size();
 		List<String> lastInLine = new ArrayList<String>();
-		//if ( size == 1 ) {
-		//	lastInLine.add( "" );
-		//	lastInLine.add( "" );
-		//	lastInLine.add( "" );
-		//	return lastInLine;
-		//}
-		//String time = "";
-		//String user = "";
-		//String msg = "";
-		
-		//System.out.println( size );
-		//System.out.println(i + "|" + chat.get(i));
+
 		String firstuser = chat.get( 0 ).get( 1 );
 		String firstmsg = chat.get( 0 ).get( 2 );
 		String lasttime = chat.get( size - 1 ).get( 0 );
@@ -1017,21 +1477,18 @@ public class App {
 		chat.remove( 0 );
 		if (firstmsg.startsWith(".") ) {
 			try {
-				//String user = obj.getUsername().get( obj.getUsername().size() - 1 );
-				//String user = chat.get(i).get( 1 );
+
 				
 				if ( !waiting ) {
 					queue(firstmsg, firstuser);
 					System.out.println( "Command registered: user="+firstuser+ ", command="+ firstmsg);
-					//chat = new ArrayList<List<String>>();
-					System.out.println( lastInLine );
+					//System.out.println( lastInLine );
 					return lastInLine;
 				} else {
 					if ( firstmsg.equals(".pause") ) {
 						queue(firstmsg, firstuser);
 						System.out.println( "Command registered: user="+firstuser+ ", command="+ firstmsg);
-						//chat = new ArrayList<List<String>>();
-						System.out.println( lastInLine );
+						//System.out.println( lastInLine );
 						return lastInLine;
 						}
 					}
@@ -1059,37 +1516,37 @@ public class App {
 		
 	} 
  
-	public void queueChatOld(List<String> chat, List<String> users, int n) throws Exception {
-		int size = chat.size();
-		for (int i = size - n; i < size; i++) {
-			//System.out.println(i + "|" + chat.get(i));
-			if (chat.get(i).startsWith(".") ) {
-				try {
+	//public void queueChatOld(List<String> chat, List<String> users, int n) throws Exception {
+	//	int size = chat.size();
+	//	for (int i = size - n; i < size; i++) {
+	//		//System.out.println(i + "|" + chat.get(i));
+	//		if (chat.get(i).startsWith(".") ) {
+	//			try {
 					//String user = obj.getUsername().get( obj.getUsername().size() - 1 );
-					String user = users.get(i);
+	//				String user = users.get(i);
 					
-					if ( !waiting ) {
-						queue(chat.get(i), user);
-						System.out.println( "Command registered: user="+user+ ", command="+ chat.get(i));
-					} else {
-						if ( chat.get(i).equals(".pause") ) {
-							queue(chat.get(i), user);
-							System.out.println( "Command registered: user="+user+ ", command="+ chat.get(i));
-						}
-					}
+	//				if ( !waiting ) {
+	//					queue(chat.get(i), user);
+	//					System.out.println( "Command registered: user="+user+ ", command="+ chat.get(i));
+	//				} else {
+	//					if ( chat.get(i).equals(".pause") ) {
+	//						queue(chat.get(i), user);
+	//						System.out.println( "Command registered: user="+user+ ", command="+ chat.get(i));
+	//					}
+	//				}
 					
-				} catch (NoSuchElementException e) {
-					e.printStackTrace();
+	//			} catch (NoSuchElementException e) {
+	//				e.printStackTrace();
  
-				} catch (Exception e) {
-					System.out.println( e.getMessage() );
-					if ( e.getMessage().equals( "Terminating execution.")  ){
-						throw e;
-					}
-					System.out.println( "slow down there");
-					e.printStackTrace();
-				}
-			}
-		}
-	} 
+	//			} catch (Exception e) {
+	//				System.out.println( e.getMessage() );
+	//				if ( e.getMessage().equals( "Terminating execution.")  ){
+	//					throw e;
+	//				}
+	//				System.out.println( "slow down there");
+	//				e.printStackTrace();
+	//			}
+	//		}
+	//	}
+	//} 
 }

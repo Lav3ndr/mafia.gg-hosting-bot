@@ -41,6 +41,10 @@ public class MafiaSession {
     public static final String DETHY = "75a1b7a1b23a1b33a1b37a1";
     public static final String LOVERS = "83a2b18a4";
     public static final String CONPLAN_6 = "18a1b1547802152a1b40a1b31a1b52a1b99a1";
+    
+    public static final String STC = "98a1b12a1b93a1b44a3";
+    public static final String CAMERASHY = "4a3b1540004252a1b1580766301a1b5639273a1";
+    
     public static final String CONSIGLIERE_8 = "28a1b61a1b7a1b75a1b31a1b45a2b57a1";
     public static final String CONSIGLIERE_10 = "28a1b61a1b7a1b1539915457a1b75a1b31a1b45a3b1596390851a1";
     public static final String DEF_MAF_12 = "28a1b19a1b8a1b1555727200a1b7a1b12a1b65a1b69a1b45a2b1572486115a1b1556390101a1";
@@ -51,10 +55,39 @@ public class MafiaSession {
     public static final String PIE8 = "7a1b12a1b69a1b75a1b57a4";
     public static final String BOOTCAMP7 = "7a1b75a1b57a3b65a1b1565630670a1";
     public static final String BOOTCAMP8 = "7a1b75a1b57a4b65a1b1565630670a1";
+    
+    public static final String V_LTR_N = "1567786474a1b5639273a1b36a1b1541806737a1b57a5";
+    public static final String GNIGHTLESS = "1596417444a7b86a2";
+    public static final String SWEETDREAMS = "75a1b57a2b28a1b13a1b45a2b87a1";
+    
     public static final String DNCT = "59a1b1553863028a1b45a3b1568391955a2b28a1b1596418309a1";
     public static final String TRIPLECAMP = "75a1b1565630670a1b324a1b65a1b1565223000a1b1565316812a1b45a5";
     public static final String HOW2MM = "65a1b75a1b86a1b7a1b32a1b57a4b5a1b31a1";
     public static final String ABC = "65a1b7a1b9a1b1540004252a1b83a1b1583467528a1b57a4";
+    
+    public static final String ASCENSION = "83a3b4a7"; //https://mafiagg.fandom.com/wiki/Ascension
+    
+    public static final String CONGRESS = "5639273a1b17a1b1540783473a1b24a1b72a1b25a7b84a1b201a1b106a3";    
+    public static final String ONESHOTCOPS = "1555727200a1b59a1b1577500425a2b1580766301a1b89a1b57a4b66a1";
+    public static final String SWORDSHIELD = "66a1b1572486115a5b79a1b1588642540a5"; //not implemented
+    public static final String MULTEMPLAR = "29a2b62a3b42a5b1573416236a2";
+    public static final String UNCERTAINTY = "4a1b61a2b7a1b12a1b66a1b32a3b57a3";
+    public static final String POWERVILLY = "28a1b7a1b75a2b1572486115a1b31a1b32a1b1552856661a1b45a3b1555727200a1b59a1";
+    public static final String WHITEFLAG = "4a10b83a3";
+    public static final String CIRCUS = "57a5b36a1b5a1b1554252534a3b17a1b66a1b26a1b10a1b54a1";
+    public static final String SOLOBOMBS = "4a1b59a1b73a1b31a1b1572568017a1b77a2b38a1b47a6b1558240320a1";
+    public static final String ALLSTARS = "38a1b75a3b57a9b31a1b34a1"; //not implemented
+    public static final String FATEDDUO = "5a1b54a1b57a2b1567786474a2b1540004252a1b31a1b84a1b45a4b1558930946a2b52a1";
+    public static final String IBERN = "7a3b1547802152a1b65a1b1572486115a1b35a1b1552856661a1b38a1b1573568724a1b45a2b47a1b49a1b87a1b4a1";
+    public static final String LIZARDRROFF = "75a2b38a1b34a1b57a7b1550785710a1b80a1b65a1b17a1b35a1";
+    public static final String MASONRELAY = "69a1b62a1b57a6b14a1b29a2b35a1b1558930946a2b1572486115a1b5a1";
+    public static final String POWERMILLERS = "31a1b1540004252a1b20a1b72a1b83a1b32a6b1565630670a1b45a1b1558240320a1b87a1b1577500425a1";
+    public static final String SHOBOMBS = "7a1b75a1b31a1b32a1b4a1b65a1b77a1b42a1b87a1b57a6b47a1";
+    public static final String VIP = "1567786474a1b7a1b1559319559a1b69a1b86a1b31a1b1581354568a1b1541480746a1b1580879842a1b57a6b1572486115a1";
+    public static final String CHESS = "https://mafia.gg/game/cedd5191-55a4-48c6-953f-4e2f44d2f79e"; // not implemented
+    public static final String IBERNFREZE = "4a1b80a1b65a1b17a1b1572486115a1b35a1b1552856661a1b38a1b1573568724a1b45a2b47a1b87a1b57a5b32a1b1540004252a1"; // not implemented
+    public static final String BASIC20 = "28a1b5a1b1540004252a1b7a1b65a1b1538276587a1b69a1b75a1b1572486115a1b31a1b32a1b1552856661a1b45a2b1597815390a1b57a5";
+    public static final String PIE25 = "57a10b80a1b75a2b36a1b14a1b69a1b9a1b1540004252a1b5a1b17a1b7a1b1540344996a1b86a1b49a1b65a1";
     
     public static final List<String> CARBON14 = new ArrayList<String>() {{
 	    add( "7a1b75a2b1565630670a1b57a3" );
@@ -968,16 +1001,38 @@ public class MafiaSession {
     }
  
     public void startGame() {
+    	session.findElement(By.xpath("//span[text()='Start game' and @class='button-contents']")).click();// [contains(.,'"+deck+"')]
+    	//session.findElement(By.xpath("//button[text()[contains(.,'Start game')]]")).click(); // and @disabled = '' and @class='button'
+    }
+    
+    public boolean kick( String player ) {
     	try {
-    		//Thread.sleep(2000);
-    		session.findElement(
-                    By.xpath("/html/body/div[1]/main/div/div[1]/div[2]/div/div[3]/div/div[2]/div/div/div/button[3]"))
-                    .click();
-    	} catch (Exception e) {
+    		session.findElement(By.xpath("//div[text()='"+player+"' and @class='game-player-list-user-username']")).click();
+    		Thread.sleep(100);
+    		session.findElement(By.xpath("//button[text()='Kick user' and @type='button']")).click();
+    		Thread.sleep(100);
+    		session.findElement(By.xpath("//span[text()='Kick' and @class='button-contents']")).click();
+    		Thread.sleep(100);
+    		session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+            Thread.sleep(100);
+            return true;
+    	}
+    	catch ( Exception e ) {
+    		session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
     		e.printStackTrace();
-        	return;
-        }
-        
+    		return false;
+    	}
+    }
+    
+    public boolean gameRunning() {
+    	try {
+    		session.findElement(By.xpath("//span[text()='Start game' and @class='button-contents']"));
+    		return false;
+    	}
+    	catch (NoSuchElementException e){
+    		return true;
+    	}
+    	
     }
  
     public void unexpectedClose() {
