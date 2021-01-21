@@ -15,4 +15,5 @@
 	- functionality to add: allow a list of setup codes to be given for a closed setup
 	- fix and robustify the functions which set day and night length
 	- add functions to change deadlock prevention
+	- read and store game configuration information in a file so that it persists across sessions and doesn't need to be reset manually on abnormal termination
 - anyone is welcome to use this code, but I ask that you please let me know if you are going to use it! I'd love to know what it's being used for.
