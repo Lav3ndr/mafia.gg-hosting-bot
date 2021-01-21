@@ -27,10 +27,10 @@ public class MafiaSession {
     private String username, password;
     private WebDriver session;
     private Actions act;
-    private boolean autoChangeRoomName;
+    //private boolean autoChangeRoomName;
     private boolean unlistedMemory;
-    private String setInUse;
-    private List<WebElement> chat, usn;
+    //private String setInUse;
+    //private List<WebElement> chat, usn;
     public static final int TWO_THIRDS_MAJORITY = 66;
     public static final int TURNED_OFF = -1;
     public static final int SIMPLE_MAJORITY = 51;
@@ -146,11 +146,11 @@ public class MafiaSession {
         }
         this.username = creds.get( 0 );
         this.password = creds.get( 1 );
-        this.autoChangeRoomName = false;
+        //this.autoChangeRoomName = false;
         this.unlistedMemory = false;
-        this.setInUse = "";
-        this.chat = new ArrayList<WebElement>();
-        this.usn = new ArrayList<WebElement>();
+        //this.setInUse = "";
+        //this.chat = new ArrayList<WebElement>();
+       // this.usn = new ArrayList<WebElement>();
         session = new ChromeDriver();
         session.manage().window().maximize();
         session.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -188,7 +188,7 @@ public class MafiaSession {
         }
     }
  
-    public void hostUnlisted(String roomName) {
+    /**public void hostUnlisted(String roomName) {
         if (!this.unlistedMemory) {
             session.findElement(By.xpath("//div[@class='checkbox']")).click();
             session.findElement(By.xpath("//div[@class='flex-1']/input"))
@@ -234,7 +234,7 @@ public class MafiaSession {
  
         }
         this.unlistedMemory = false;
-    }
+    }**/
     
     public boolean tryHostNew() {
     	try {
@@ -269,7 +269,7 @@ public class MafiaSession {
         }
     }
  
-    public void defaultSettings() {
+    /**public void defaultSettings() {
  
         try {
             session.findElement(By.xpath("//span[text()='Edit options']")).click();
@@ -293,8 +293,9 @@ public class MafiaSession {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }**/
  
+    //only used by untested functions setDayTime and setNightTime
     public void editOptions() {
         try {
             try {
@@ -309,6 +310,7 @@ public class MafiaSession {
         }
     }
  
+    //only used by untested functions setDayTime and setNightTime
     public void gameSettings() {
         try {
             try {
@@ -340,7 +342,7 @@ public class MafiaSession {
  
     }
  
-    public void setMajority(int code) {
+    /**public void setMajority(int code) {
         try {
             Thread.sleep(100);
             session.findElement(By.xpath("//option[@value=[code]]".replace("[code]", "" + code))).click();
@@ -348,7 +350,7 @@ public class MafiaSession {
  
         }
  
-    }
+    }**/
  
     public void setNightTime(int t) {
         try {
@@ -389,7 +391,7 @@ public class MafiaSession {
         }
     }
  
-    public void setSetupOld(String setupCode) {
+    /**public void setSetupOld(String setupCode) {
         try {
             try {
  
@@ -422,7 +424,7 @@ public class MafiaSession {
         	e.printStackTrace();
             //setSetup(setupCode);
         }
-    }
+    }**/
     
     public boolean setDeck( String deck ) {
     	try {
@@ -468,13 +470,13 @@ public class MafiaSession {
  
     }
  
-    public void enableAutoChangeRoomName() {
-        this.autoChangeRoomName = true;
-    }
+    //public void enableAutoChangeRoomName() {
+    //    this.autoChangeRoomName = true;
+    //}
  
-    public void disableAutoChangeRoomName() {
-        this.autoChangeRoomName = false;
-    }
+    //public void disableAutoChangeRoomName() {
+    //    this.autoChangeRoomName = false;
+    //}
  
     public void changeRoomName(String roomName) {
         try {
@@ -650,10 +652,11 @@ public class MafiaSession {
         }
     }
      
-    public void home() {
-        session.findElement(By.xpath("/html/body/div[1]/header/div/h1/a"));
-    }
- 
+    /**
+    //public void home() {
+    //    session.findElement(By.xpath("/html/body/div[1]/header/div/h1/a"));
+    //}
+    
     public void autoPlayerUp(boolean choice) {
         if (choice == true) {
             while (true) {
@@ -689,7 +692,7 @@ public class MafiaSession {
         } catch (NoSuchElementException e) {
  
         }
-    }
+    }**/
  
     public boolean soundOff() {
         try {
@@ -784,11 +787,11 @@ public class MafiaSession {
         try {
         	List<WebElement> rawChat = session.findElements(By.xpath("//div[@class='game-chronicle-chat']"));
         	List<WebElement> names = session.findElements(By.xpath("//div[@class='game-chronicle-name']"));
-        	List<String> times = new ArrayList<String>();
+        	//List<String> times = new ArrayList<String>();
         	List<List<String>> curchat = new ArrayList<List<String>>();
         	for (int i = 0; i < rawChat.size(); i++) {
         		List<String> toSplit = Arrays.asList( rawChat.get( i ).getText().split( "\n") );
-        		String time = toSplit.get( 0 );
+        		//String time = toSplit.get( 0 );
         		int namelength = names.get( i ).getText().length();
         		List<String> cmd = new ArrayList<String>();
         		cmd.add( toSplit.get( 0 ));
@@ -827,7 +830,7 @@ public class MafiaSession {
         }
     }
  
-    public int updateChat(List<String> outDatedChat, List<String> outDatedUsernames) {
+    /**public int updateChat(List<String> outDatedChat, List<String> outDatedUsernames) {
         try {
         	List<WebElement> fullChat = session.findElements(By.xpath("//div[@class='game-chronicle-chat']"));
         	List<WebElement> names = session.findElements(By.xpath("//div[@class='game-chronicle-name']"));
@@ -916,7 +919,7 @@ public class MafiaSession {
         	e.printStackTrace();
         	return 0;
         }
-    }
+    }**/
  
     //public int updateUsername(List<String> outDatedUsername) {
      //   try {
@@ -1035,13 +1038,13 @@ public class MafiaSession {
     	
     }
  
-    public void unexpectedClose() {
-        try {
-            session.findElement(By.xpath("//button[@class='dialog-close']")).click();
-        } catch (Exception e) {
-        	e.printStackTrace();
-        }
-    }
+    //public void unexpectedClose() {
+    //    try {
+    //        session.findElement(By.xpath("//button[@class='dialog-close']")).click();
+     //   } catch (Exception e) {
+     //   	e.printStackTrace();
+     //   }
+    //}
 }
  
 //1066-max, 516-min 550 pixels

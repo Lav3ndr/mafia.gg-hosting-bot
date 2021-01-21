@@ -24,10 +24,10 @@ public class App {
 //	private static long ms = 0;
 	private static boolean afk = false;
 	
-	private static boolean listed = false;
-	private static boolean rroff = true;
+	private static boolean listed = true; //check/uncheck to host listed or unlisted rooms by default
+	private static boolean rroff = true; // default conplan setting
 	//private static boolean daystart = false;
-	private static boolean hiddenSetup = false;
+	private static boolean hiddenSetup = false; // default conplan setting
 	private static String currentSetup = "conplan";
 	//private static int setupSize = 0;
 	private static String autoHostText = " (Lavenbot)";//" (autohosted)";
@@ -179,7 +179,7 @@ public class App {
 		//return false;
 	}
  
-	public void queue(String command, String user) throws Exception {
+	public void execute(String command, String user) throws Exception {
 		boolean authorized = isAuthorized( user );
 		if (command.equals(".intro") && authorized)
 			intro();
@@ -414,7 +414,7 @@ public class App {
 				obj.sendMessage( "Players have voted to play setup: " + newSetup );
 				resetVotes();
 				resetTimer();
-				queue( ".setup "+ newSetup, auth.get( 0 ));
+				execute( ".setup "+ newSetup, auth.get( 0 ));
 			}
 		} else if (command.startsWith(".votethresh ") && authorized ) {
 			command = command.replace(".votethresh ", "");
@@ -422,7 +422,7 @@ public class App {
 				int n = Integer.parseInt(command);
 				votethreshold = n;
 				obj.sendMessage( "Vote threshold has been adjusted to "+Integer.toString( n));
-				queue( ".vote ", auth.get( 0 ));
+				execute( ".vote ", auth.get( 0 ));
 			} catch (NumberFormatException e) {
 				obj.sendMessage(e.getMessage());
 			}
@@ -1364,8 +1364,8 @@ public class App {
 			} catch (InterruptedException e) {
 			}
 			try {
-				appObj.queue(".setup " + currentSetup, auth.get( 0 ) );
-				appObj.queue(".time",  auth.get( 0 ) );
+				appObj.execute(".setup " + currentSetup, auth.get( 0 ) );
+				appObj.execute(".time",  auth.get( 0 ) );
 			} catch (Exception e ) {
 				return;
 			}
@@ -1411,7 +1411,7 @@ public class App {
 				else if (afk && obj.playerdUp() == obj.totalPlayers() ) {
 					try {
 						if ( appObj.toStart() > 0 && obj.playerdUp() != 0 ) {
-							appObj.queue( ".time", auth.get( 0 ) );
+							appObj.execute( ".time", auth.get( 0 ) );
 						}
 						else {
 							obj.sendMessage("GLHF! DON'T AFK!");
@@ -1480,13 +1480,13 @@ public class App {
 
 				
 				if ( !waiting ) {
-					queue(firstmsg, firstuser);
+					execute(firstmsg, firstuser);
 					System.out.println( "Command registered: user="+firstuser+ ", command="+ firstmsg);
 					//System.out.println( lastInLine );
 					return lastInLine;
 				} else {
 					if ( firstmsg.equals(".pause") ) {
-						queue(firstmsg, firstuser);
+						execute(firstmsg, firstuser);
 						System.out.println( "Command registered: user="+firstuser+ ", command="+ firstmsg);
 						//System.out.println( lastInLine );
 						return lastInLine;
