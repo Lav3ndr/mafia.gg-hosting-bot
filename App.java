@@ -823,7 +823,7 @@ public class App {
 				currentSetup = "uncertainty";
 				obj.nightStart();
 				obj.majOn();
-				obj.changeRoomName("Power Villy 13"+autoHostText);
+				obj.changeRoomName("Uncertainty"+autoHostText);
 				if ( hiddenSetup ) {
 					obj.hideSetupToggle();
 					hiddenSetup = false;
@@ -967,7 +967,7 @@ public class App {
 					obj.rroffToggle();
 					rroff = false;
 				}				
-				obj.setSetup(MafiaSession.SHOBOMBS);
+				obj.setSetup(MafiaSession.POWERMILLERS);
 				displayInfo( currentSetup );
 			} else if (command.equalsIgnoreCase("shobombs")) {
 				currentSetup = "shobombs";
