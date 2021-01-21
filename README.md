@@ -8,7 +8,8 @@
 - apologies for the shitty/almost entirely absent documentation and comments
 - yes, I know this code could be optimized greatly
 - to do:
-	- commands to add: .expand, .despand (figure out how to deal with these intelligently, will probably involve low-level functions to read the size of a setup and current number of players in the room), .ban [user] (would open a new tab and add user to the ban list, then return to main tab)
+	- commands to add: .expand, .despand (figure out how to deal with these intelligently, will probably involve low-level functions to read the size of a setup and current number of players in the room)
+	- functionality to add: .ban [user] (would open a new tab and add user to the ban list, then return to main tab)
 	- functionality to add: autokick users who spam commands (have a set number of commands allowable for each user which decrements to zero and slowly recharges; warn players when low)
 	- functionality to add: allow a list of setup codes to be given for a closed setup
 	- fix and robustify the functions which set day and night length
