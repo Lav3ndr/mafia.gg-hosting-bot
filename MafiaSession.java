@@ -449,7 +449,7 @@ public class MafiaSession {
         }
     }
  
-    public void setDeckOld (String name) {// not working yet
+    /**public void setDeckOld (String name) {// not working yet
         session.findElement(By.xpath("//span[text()='Edit options']")).click();
         session.findElement(By.xpath("//button[text()='Deck']")).click();
         if (name.equalsIgnoreCase("no deck")) {
@@ -468,7 +468,7 @@ public class MafiaSession {
         }
         session.findElement(By.xpath("//span[text()='Save']")).click();
  
-    }
+    }**/
  
     //public void enableAutoChangeRoomName() {
     //    this.autoChangeRoomName = true;
