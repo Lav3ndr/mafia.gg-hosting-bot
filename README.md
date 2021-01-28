@@ -4,10 +4,11 @@
 - MafiaSession.java contains the lower-level code which interacts with the browser
 - in my experience the biggest difficulty for this project was just configuring eclipse to work with selenium/chromedriver. this tutorial got me started: [https://www.guru99.com/installing-selenium-webdriver.html](https://www.guru99.com/installing-selenium-webdriver.html)
 - there needs to be a file called "credentials.txt" in the same directory as chromedriver.exe which contains the username and password of the mafia.gg account to use for the bot (username on first line, password on the second line)
-- if the program terminates abnormally, you need to reset to default conplan settings manually (majority vote off, role reveal off). setup changes are done relative to this.
+- if the program terminates abnormally, you need to reset some default conplan settings manually (night start, majority vote off, role reveal off, unhidden setup, etc). some setup changes (especially those involving checkboxes) are done relative to this.
 - apologies for the shitty/almost entirely absent documentation and comments
 - yes, I know this code could be optimized greatly
 - to do:
+	- add other semi-open setups from the fandom page
 	- add a setup class or struct and reorganize code to avoid having to input setup information in like 7 separate places
 	- commands to add: .expand, .despand (figure out how to deal with these intelligently, will probably involve low-level functions to read the size of a setup and current number of players in the room)
 	- functionality to add: .ban [user] (would open a new tab and add user to the ban list, then return to main tab)
@@ -15,5 +16,5 @@
 	- functionality to add: allow a list of setup codes to be given for a closed setup
 	- fix and robustify the functions which set day and night length
 	- add functions to change deadlock prevention
-	- read and store game configuration information in a file so that it persists across sessions and doesn't need to be reset manually on abnormal termination
+	- read and store game configuration information in a file so that it persists across sessions and doesn't need to be reset manually on abnormal termination OR figure out how to make checkboxes absolute
 - anyone is welcome to use this code, but I ask that you please let me know if you are going to use it! I'd love to know what it's being used for.

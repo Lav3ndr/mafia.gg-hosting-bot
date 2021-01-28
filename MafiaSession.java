@@ -74,9 +74,10 @@ public class MafiaSession {
     public static final String UNCERTAINTY = "4a1b61a2b7a1b12a1b66a1b32a3b57a3";
     public static final String POWERVILLY = "28a1b7a1b75a2b1572486115a1b31a1b32a1b1552856661a1b45a3b1555727200a1b59a1";
     public static final String WHITEFLAG = "4a10b83a3";
+    public static final String ALLSTARS13 =  "75a3b31a1b38a1b34a1b57a7"; //not implemented
     public static final String CIRCUS = "57a5b36a1b5a1b1554252534a3b17a1b66a1b26a1b10a1b54a1";
     public static final String SOLOBOMBS = "4a1b59a1b73a1b31a1b1572568017a1b77a2b38a1b47a6b1558240320a1";
-    public static final String ALLSTARS = "38a1b75a3b57a9b31a1b34a1"; //not implemented
+    public static final String ALLSTARS15 = "38a1b75a3b57a9b31a1b34a1"; //not implemented
     public static final String FATEDDUO = "5a1b54a1b57a2b1567786474a2b1540004252a1b31a1b84a1b45a4b1558930946a2b52a1";
     public static final String IBERN = "7a3b1547802152a1b65a1b1572486115a1b35a1b1552856661a1b38a1b1573568724a1b45a2b47a1b49a1b87a1b4a1";
     public static final String LIZARDRROFF = "75a2b38a1b34a1b57a7b1550785710a1b80a1b65a1b17a1b35a1";
@@ -84,20 +85,10 @@ public class MafiaSession {
     public static final String POWERMILLERS = "31a1b1540004252a1b20a1b72a1b83a1b32a6b1565630670a1b45a1b1558240320a1b87a1b1577500425a1";
     public static final String SHOBOMBS = "7a1b75a1b31a1b32a1b4a1b65a1b77a1b42a1b87a1b57a6b47a1";
     public static final String VIP = "1567786474a1b7a1b1559319559a1b69a1b86a1b31a1b1581354568a1b1541480746a1b1580879842a1b57a6b1572486115a1";
-    public static final String CHESS = "https://mafia.gg/game/cedd5191-55a4-48c6-953f-4e2f44d2f79e"; // not implemented
+    public static final String CHESS = "40a1b323a1b106a7b25a7"; // not implemented
     public static final String IBERNFREZE = "4a1b80a1b65a1b17a1b1572486115a1b35a1b1552856661a1b38a1b1573568724a1b45a2b47a1b87a1b57a5b32a1b1540004252a1"; // not implemented
     public static final String BASIC20 = "28a1b5a1b1540004252a1b7a1b65a1b1538276587a1b69a1b75a1b1572486115a1b31a1b32a1b1552856661a1b45a2b1597815390a1b57a5";
     public static final String PIE25 = "57a10b80a1b75a2b36a1b14a1b69a1b9a1b1540004252a1b5a1b17a1b7a1b1540344996a1b86a1b49a1b65a1";
-    
-    public static final List<String> CARBON14 = new ArrayList<String>() {{
-	    add( "7a1b75a2b1565630670a1b57a3" );
-	    add( "7a1b1565630670a1b57a3b65a2" );
-	}};   
-    
-    public static final List<String> DOUBLENEG = new ArrayList<String>() {{
-	    add( "1596337363a2b47a1b1588642540a2b57a1b7a1" );
-	    add( "1596337363a2b47a1b1588642540a2b57a1b23a1" );
-	}};    
     
     public static final List<String> SUPERPOS = new ArrayList<String>() {{
 	    add( "1599661616a1b37a1b1600386374a1b1556390101a1" );
@@ -108,6 +99,40 @@ public class MafiaSession {
 	    add( "1596417444a1b1538276587a1b1596418665a1b37a1" );
 	    add( "1596417444a1b1596418665a1b37a1b75a1" );
 	    add( "1596417444a1b23a1b69a1b1599661616a1" );
+	}};
+	
+	
+    public static final List<String> CARBON14 = new ArrayList<String>() {{
+	    add( "7a1b75a2b1565630670a1b57a3" );
+	    add( "7a1b1565630670a1b57a3b65a2" );
+	}};   
+    
+   
+    
+	public static final List<String> MATRIX6 = new ArrayList<String>() {{
+	    add( "75a1b57a4b66a1b1577500425a1" );
+	    add( "57a3b75a1b7a1b12a1b69a1" );
+	    add( "57a3b1603688758a1b75a1b1567786474a1b1540004252a1" );
+	    add( "1567786474a1b1577500425a1b75a1b57a3b69a1" );
+	    add( "57a4b75a1b7a1b1540004252a1" );
+	    add( "75a1b57a3b66a1b12a1b1603688758a1" );
+	}};
+	
+	 public static final List<String> DOUBLENEG = new ArrayList<String>() {{
+		    add( "1596337363a2b47a1b1588642540a2b57a1b7a1" );
+		    add( "1596337363a2b47a1b1588642540a2b57a1b23a1" );
+	}};
+		
+	public static final List<String> NEWD3 = new ArrayList<String>() {{
+		    add( "57a5b69a1b1540004252a1b7a1b12a1" );
+		    add( "69a1b57a5b1540004252a1b35a1b52a1" );
+		    add( "57a5b69a1b1573416236a2b1540004252a1" );
+		    add( "57a5b52a1b1540004252a1b324a1b87a1" );
+		    add( "57a5b1540004252a1b324a1b87a1b35a1" );
+		    add( "57a5b1540004252a1b87a1b52a1b12a1" );
+		    add( "57a6b75a2b7a1" );
+		    add( "57a6b75a2b35a1" );
+		    add( "57a5b75a2b1573416236a2" );
 	}};
 	
 	public static final List<String> MAFIAJJANI = new ArrayList<String>() {{
@@ -124,6 +149,25 @@ public class MafiaSession {
 	    add( "5a1b7a1b75a1b1596417444a1b1565630670a1b57a5b65a2" );
 	    add( "5a1b7a1b1596417444a1b1565630670a1b57a5b65a3" );
 	}};
+	
+	public static final List<String> ALLSTARSSEMI = new ArrayList<String>() {{
+	    add( "1555727200a5b31a1b34a1b1580879842a1b1595571568a1b1596420536a2b1596416287a1b54a1b1588642540a1b67a1b7a1" );
+	    add( "1555727200a5b31a1b34a1b1580879842a1b1595571568a1b1596420536a2b23a1b1596416287a1b54a1b1588642540a1b67a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b1596416287a1b1588642540a1b67a1b5a1b7a1b1596420536a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b1596416287a1b1588642540a1b67a1b5a1b1596420536a1b23a1" );
+	    add( "1555727200a5b31a1b34a1b1580879842a1b1595571568a1b1596416287a1b1588642540a1b7a1b1596420536a2b54a1b1567787886a1" );
+	    add( "1555727200a5b31a1b34a1b1580879842a1b1595571568a1b1596416287a1b1588642540a1b1596420536a2b54a1b1567787886a1b23a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b1596416287a1b1588642540a1b7a1b1596420536a1b1567787886a1b5a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b1596416287a1b1588642540a1b1596420536a1b1567787886a1b5a1b23a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b1596420536a1b7a1b54a1b67a1b1572486115a1b79a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b1596420536a1b54a1b67a1b1572486115a1b79a1b23a1" );
+	    add( "1555727200a7b31a1b34a1b1580879842a1b1595571568a1b7a1b67a1b1572486115a1b79a1b5a1" );
+	    add( "1555727200a7b31a1b34a1b1580879842a1b1595571568a1b67a1b1572486115a1b79a1b5a1b23a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b7a1b1572486115a1b79a1b1596420536a1b54a1b1567787886a1" );
+	    add( "1555727200a6b31a1b34a1b1580879842a1b1595571568a1b1572486115a1b79a1b1596420536a1b54a1b1567787886a1b23a1" );
+	    add( "1555727200a7b31a1b34a1b1580879842a1b1595571568a1b7a1b1572486115a1b79a1b5a1b1567787886a1" );
+	    add( "1555727200a7b31a1b34a1b1580879842a1b1595571568a1b1572486115a1b79a1b5a1b1567787886a1b23a1" );
+}};
  
     private MafiaSession() {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
@@ -611,6 +655,42 @@ public class MafiaSession {
             session.findElement(By.xpath("//label[text()[contains(.,'Finalize vote on majority')]]")).click();
             Thread.sleep(100);
             session.findElement(By.xpath("//option[@value='51']")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+            Thread.sleep(100);
+            save();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+        }
+    }
+    
+    public void twokptwo() {
+    	try {
+    		session.findElement(By.xpath("//span[text()='Edit options']")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("//button[text()='Game']")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("//label[text()[contains(.,'Extra mafia kill power')]]")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("//option[@value='3']")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+            Thread.sleep(100);
+            save();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+        }
+    }
+    
+    public void noextrakp() {
+    	try {
+    		session.findElement(By.xpath("//span[text()='Edit options']")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("//button[text()='Game']")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("//label[text()[contains(.,'Extra mafia kill power')]]")).click();
+            Thread.sleep(100);
+            session.findElement(By.xpath("//option[@value='0']")).click();
             Thread.sleep(100);
             session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
             Thread.sleep(100);
