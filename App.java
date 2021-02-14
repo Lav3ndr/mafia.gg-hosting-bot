@@ -30,7 +30,7 @@ public class App {
 	private static boolean hiddenSetup = false; // default conplan setting
 	private static String currentSetup = "conplan";
 	//private static int setupSize = 0;
-	private static String autoHostText = " (Lavenbot)";//" (autohosted)";
+	private static String autoHostText = "";//" (autohosted)";
 	private static boolean waiting = false;
 	private static int votethreshold = 3;
 	private static long timerstart = System.nanoTime();
@@ -129,6 +129,9 @@ public class App {
         votes.put("mafiajjani", new ArrayList<String>());
         votes.put("sodium24", new ArrayList<String>());
         votes.put("allstarssemi", new ArrayList<String>());
+        votes.put("revrol7", new ArrayList<String>());
+        votes.put("revrol11", new ArrayList<String>());
+        votes.put("revrol15", new ArrayList<String>());
 	}
 	
 	public String displayVotes() {
@@ -216,10 +219,15 @@ public class App {
 			obj.sendMessage("Thanks for playing everyone! Signing off...");
 			throw new Exception( "Terminating execution.");
 		}
+		else if (command.equalsIgnoreCase(".host") && authorized) {
+			obj.giveHost(user);
+			obj.sendMessage( "Hosting duty passed to " + user + "." );
+		}
 		else if (command.equalsIgnoreCase(".democracy") && authorized) {
 			votemode = !votemode;
 			if ( votemode ) {
 				obj.sendMessage( "Democracy enabled." );
+				help();
 			}
 			else {
 				obj.sendMessage( "Democracy disabled." );
@@ -234,6 +242,12 @@ public class App {
 			else {
 				obj.sendMessage( "Couldn't kick " + command + "." );
 			}
+		}
+		else if (command.startsWith(".ban ") && authorized) {
+			command = command.replace(".ban ", "");
+			obj.ban( command );
+			obj.sendMessage( command + " has been banned.");
+			execute( ".kick "+command, user);
 		}
 		else if (command.equals(".impatient")) {
 			int onlyneed = obj.totalPlayers() - obj.playerdUp();
@@ -455,8 +469,24 @@ public class App {
 				obj.majOff();
 				obj.changeRoomName("Autohost testing");
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
+				}
+				if ( !rroff ) {
+					obj.rroffToggle();
+					rroff = true;
+				}
+				obj.setSetup(MafiaSession.SINGLE_PLAYER);
+				displayInfo( currentSetup );
+			} else if (command.equalsIgnoreCase("singlehidden")) {
+				currentSetup = "singlehidden";
+				obj.noextrakp();
+				obj.nightStart();
+				obj.majOff();
+				obj.changeRoomName("Autohost testing");
+				if ( !hiddenSetup ) {
+					//obj.hideSetupToggle();
+					hiddenSetup = true;
 				}
 				if ( !rroff ) {
 					obj.rroffToggle();
@@ -471,7 +501,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Consifom"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( !rroff ) {
@@ -487,7 +517,7 @@ public class App {
 				obj.majOff();
 				obj.changeRoomName("5 Man Conplan"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( !rroff ) {
@@ -503,7 +533,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Dethy"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -520,7 +550,7 @@ public class App {
 				obj.majOff();
 				obj.changeRoomName("5 Man Conplan + Lover"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( !rroff ) {
@@ -537,7 +567,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Lovers"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -555,7 +585,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Shrink the Cult"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -573,7 +603,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Camera Shy"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( !rroff ) {
@@ -592,7 +622,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Guns n Hookers"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -608,7 +638,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Pie E7"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -624,7 +654,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Bootcamp"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -640,7 +670,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Pie E7"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -656,7 +686,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Bootcamp"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -672,7 +702,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Dreams Never Come True"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -688,7 +718,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Janitorial"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -704,7 +734,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("ABC"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -720,7 +750,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("How To Play Marksman"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -736,7 +766,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Triplecamp"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -753,7 +783,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Congress"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -769,7 +799,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Ascension"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -785,7 +815,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Sweet Dreams"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -801,7 +831,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Gnightless"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -817,7 +847,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("V_ltr_n μ"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -833,7 +863,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("One Shot Cops"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -849,7 +879,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Multemplar"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -865,7 +895,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Uncertainty"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -881,7 +911,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Power Villy 13"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -897,7 +927,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("White Flag"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -913,7 +943,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Circus"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -929,7 +959,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("All Stars"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( !rroff ) {
@@ -945,7 +975,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("All Stars"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( !rroff ) {
@@ -961,7 +991,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Solobombs"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -977,7 +1007,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Fated Duo"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -993,7 +1023,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("iBern"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -1009,7 +1039,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Lizard RR Off"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( !rroff ) {
@@ -1025,7 +1055,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Mason Relay"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -1041,7 +1071,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Power Millers"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -1057,7 +1087,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Shobombs"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -1073,7 +1103,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("VIP"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -1089,7 +1119,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Basic 20"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -1105,7 +1135,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Pie25"+autoHostText);
 				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = false;
 				}
 				if ( rroff ) {
@@ -1129,7 +1159,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Superposition (semi-open)"+autoHostText);
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( !rroff ) {
@@ -1147,7 +1177,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Double negative (semi-open)"+autoHostText);
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( !rroff ) {
@@ -1166,7 +1196,7 @@ public class App {
 				obj.changeRoomName("Carbon-14 (semi-open)"+autoHostText);
 				// https://mafiagg.fandom.com/wiki/MafiaJJanitorial
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( rroff ) {
@@ -1185,7 +1215,7 @@ public class App {
 				obj.changeRoomName("Matrix6.gg (semi-open)"+autoHostText);
 				// https://mafiagg.fandom.com/wiki/MafiaJJanitorial
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( rroff ) {
@@ -1204,7 +1234,7 @@ public class App {
 				obj.changeRoomName("NewD3 M (semi-open)"+autoHostText);
 				// https://mafiagg.fandom.com/wiki/MafiaJJanitorial
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( rroff ) {
@@ -1223,7 +1253,7 @@ public class App {
 				obj.changeRoomName("MafiaJJanitorial (semi-open)"+autoHostText);
 				// https://mafiagg.fandom.com/wiki/MafiaJJanitorial
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( rroff ) {
@@ -1241,7 +1271,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("Sodium-24 (semi-open)"+autoHostText);
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( rroff ) {
@@ -1259,7 +1289,7 @@ public class App {
 				obj.majOn();
 				obj.changeRoomName("All Stars But (semi-open)"+autoHostText);
 				if ( !hiddenSetup ) {
-					obj.hideSetupToggle();
+					//obj.hideSetupToggle();
 					hiddenSetup = true;
 				}
 				if ( rroff ) {
@@ -1270,7 +1300,63 @@ public class App {
 			    String randomElement = MafiaSession.ALLSTARSSEMI.get(rand.nextInt(MafiaSession.ALLSTARSSEMI.size()));
 				obj.setSetup( randomElement );
 				displayInfo( currentSetup );
-			}			
+			} else if (command.equalsIgnoreCase( "revrol7" )) {
+				currentSetup = "revrol7";
+				obj.noextrakp();
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("Reverse Roulette (semi-open)"+autoHostText);
+				if ( !hiddenSetup ) {
+					//obj.hideSetupToggle();
+					hiddenSetup = true;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}
+				Random rand = new Random();
+			    String randomElement = MafiaSession.REVERSEROULETTE7.get(rand.nextInt(MafiaSession.REVERSEROULETTE7.size()));
+				obj.setSetup( randomElement );
+				displayInfo( currentSetup );
+			} 
+			else if (command.equalsIgnoreCase( "revrol11" )) {
+				currentSetup = "revrol11";
+				obj.noextrakp();
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("Reverse Roulette (semi-open)"+autoHostText);
+				if ( !hiddenSetup ) {
+					//obj.hideSetupToggle();
+					hiddenSetup = true;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}
+				Random rand = new Random();
+			    String randomElement = MafiaSession.REVERSEROULETTE11.get(rand.nextInt(MafiaSession.REVERSEROULETTE11.size()));
+				obj.setSetup( randomElement );
+				displayInfo( currentSetup );
+			}	
+			else if (command.equalsIgnoreCase( "revrol15" )) {
+				currentSetup = "revrol15";
+				obj.noextrakp();
+				obj.dayStart();
+				obj.majOn();
+				obj.changeRoomName("Reverse Roulette (semi-open)"+autoHostText);
+				if ( !hiddenSetup ) {
+					//obj.hideSetupToggle();
+					hiddenSetup = true;
+				}
+				if ( rroff ) {
+					obj.rroffToggle();
+					rroff = false;
+				}
+				Random rand = new Random();
+			    String randomElement = MafiaSession.REVERSEROULETTE15.get(rand.nextInt(MafiaSession.REVERSEROULETTE15.size()));
+				obj.setSetup( randomElement );
+				displayInfo( currentSetup );
+			}	
 		} else if (command.equalsIgnoreCase(".help")) {
 			help();
 		} else if (command.startsWith(".roomName ") && authorized) {
@@ -1334,7 +1420,7 @@ public class App {
 		if ( votemode ) {
 			obj.sendMessage( "Use this syntax to vote for a setup: '.vote [setup code]' (e.g. '.vote pie7')"  );
 			obj.sendMessage( "Open setup codes : consifom | dethy | conplan | conplan+ | lovers | stc | camerashy | pie7 | bootcamp | gnh | pie7+ | bootcamp+ | sweetdreams | gnightless | voltronmicro | dnct | jani | abc | ascension | how2mm | oneshotcops | triplecamp | multemplar | uncertainty | powervilly13 | whiteflag | allstars13 | circus | allstars15 | solobombs | fatedduo | ibern | lizardrroff | masonrelay | powermillers | shobombs | vip | congress | basic20 | pie25" );
-			obj.sendMessage( "Semi-open/closed setup codes : superposition | carbon14 | matrix6.gg | notnot | newd3 | mafiajjani | sodium24 | allstarssemi  /\\/\\/\\   Try these commands, too! : .help | .info | .info [setup code] | .showvotes | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits");
+			obj.sendMessage( "Semi-open/closed setup codes : superposition | carbon14 | revrol7 | matrix6 | notnot | newd3 | revrol11 | mafiajjani | sodium24 | revrol15 | allstarssemi  /\\/\\/\\   Try these commands, too! : .help | .info | .info [setup code] | .showvotes | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits");
 		} else {
 			obj.sendMessage( "Available commands : .help | .info | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits" );
 		}
@@ -1360,7 +1446,6 @@ public class App {
 		else if (cur.equals( "conplan+") ) {
 			msg = msg + "5 Man Conplan +. Read about it here: https://mafiagg.fandom.com/wiki/5_Man_Conplan";
 		}
-		
 		else if (cur.equals( "stc") ) {
 			msg = msg + "Shrink the Cult. Read about it here: https://mafiagg.fandom.com/wiki/Shrink_the_Cult";
 		}
@@ -1471,44 +1556,52 @@ public class App {
 		}
 		
 		else if (cur.equals( "superposition") ) {
-			msg = msg + "Superposition. It is a semi-open setup with 8 possibilities. Read about the possibilities here: https://mafiagg.fandom.com/wiki/Superposition";
+			msg = msg + "Superposition. It is a semi-open setup with 8 possibilities. The currently shown setup is only one of the possibilities. Read about the possibilities here: https://mafiagg.fandom.com/wiki/Superposition";
 		}
 		else if (cur.equals( "carbon14") ) {
-			msg = msg + "Carbon-14. It is a semi-open setup with 2 possibilities: cop+polygraph+3villy+2gf OR cop+polygraph+3villy+2mafia. Read about the possibilities here: https://wiki.mafiascum.net/index.php?title=Carbon-14";
+			msg = msg + "Carbon-14. It is a semi-open setup with 2 possibilities: cop+polygraph+3villy+2gf OR cop+polygraph+3villy+2mafia. The currently shown setup is only one of the possibilities. Read about the possibilities here: https://wiki.mafiascum.net/index.php?title=Carbon-14";
 		}
-		else if (cur.equals( "matrix6.gg") ) {
-			msg = msg + "Matrix6.gg. It is a semi-open setup with 6 possibilities. Read about the possibilities here: https://mafiagg.fandom.com/wiki/Matrix6.gg";
+		else if (cur.equals( "matrix6") ) {
+			msg = msg + "Matrix6.gg. It is a semi-open setup with 6 possibilities. The currently shown setup is only one of the possibilities. Read about the possibilities here: https://mafiagg.fandom.com/wiki/Matrix6.gg";
 		}
 		else if (cur.equals( "notnot") ) {
-			msg = msg + "Double negative. It is a semi-open setup with 2 possibilities. See this link: https://imgur.com/a/Z9s71QU";
+			msg = msg + "Double negative. It is a semi-open setup with 2 possibilities. The currently shown setup is only one of the possibilities. See this link: https://imgur.com/a/Z9s71QU";
 		}
 		else if (cur.equals( "newd3") ) {
-			msg = msg + "NewD3 M. It is a semi-open setup with 9 possibilities. Read about the possibilities here: https://mafiagg.fandom.com/wiki/NewD3_M";
+			msg = msg + "NewD3 M. It is a semi-open setup with 9 possibilities. The currently shown setup is only one of the possibilities. Read about the possibilities here: https://mafiagg.fandom.com/wiki/NewD3_M";
 		}
 		else if (cur.equals( "mafiajjani") ) {
-			msg = msg + "MafiaJJanitorial. It is a semi-open setup with 4 possibilities similar to Janitorial. Read about it here: https://mafiagg.fandom.com/wiki/MafiaJJanitorial";
+			msg = msg + "MafiaJJanitorial. It is a semi-open setup with 4 possibilities similar to Janitorial. The currently shown setup is only one of the possibilities. Read about it here: https://mafiagg.fandom.com/wiki/MafiaJJanitorial";
 		}
 		else if (cur.equals( "sodium24") ) {
-			msg = msg + "Sodium-24. It is a semi-open setup with 4 possibilities. Read about it here: https://mafiagg.fandom.com/wiki/Sodium-24";
+			msg = msg + "Sodium-24. It is a semi-open setup with 4 possibilities. The currently shown setup is only one of the possibilities. Read about it here: https://mafiagg.fandom.com/wiki/Sodium-24";
 		}
 		else if (cur.equals( "allstarssemi") ) {
-			msg = msg + "All Stars But. It is a semi-open setup with 16 possibilities which is two kill power until two mafia are alive, and is effectively role reveal off due to bozoman. Bozoman exists to give hints about the setup to town. See the possibilities here: https://imgur.com/EVN42r8";
-		}		
-		
+			msg = msg + "All Stars But. It is a semi-open setup with 16 possibilities which is two kill power until two mafia are alive, and is effectively role reveal off due to bozoman. Bozoman exists to give hints about the setup to town. The currently shown setup is only one of the possibilities. See the possibilities here: https://imgur.com/EVN42r8";
+		}
+		else if (cur.equals( "revrol7") ||  cur.equals( "revrol11") || cur.equals( "revrol15") ) {
+			msg = msg + "Reverse Roulette. It is a semi-open setup with 2 possibilities. The currently shown setup is only one of the possibilities. SPECIAL RULES: 1) TRAITOR WINS WITH KILLER 2) TOWN WINS ALONE IF MERLIN LIVES UNTIL FINAL 2. More info here: https://mafiagg.fandom.com/wiki/Reverse_roulette";
+		}	
 		obj.sendMessage(msg);
 	}
  
 	public static void main(String[] args) {
 		boolean firstTime = true;
-		boolean gameRunning = false;
+		//boolean gameRunning = false;
 		while (true) {
 			
 			afk = false;
 			App appObj = new App();
-			if ( firstTime) {
+			if ( firstTime ) {
 				obj.hostUnlisted();
 				obj.soundOff();
 				
+			}
+			// unhide the setup until game start
+			else {
+				if ( hiddenSetup ) {
+					obj.hideSetupToggle();
+				}
 			}
 			
 			List<List<String>> chatQueue = new ArrayList<List<String>>();
@@ -1542,23 +1635,49 @@ public class App {
 			int patience = 15;
 			//gameRunning = false;
 			while (true) {
+				// Try to host a new room if possible
 				if ( obj.tryHostNew() ) {
 					firstTime = false;
 					break;
 				}
+				// Continue if the game is running
 				if (obj.gameRunning() ) {
+					continue;
+				}
+				// Update the command queue and execute next command
+				obj.updateChatSmart( chatQueue, lastInLine );
+				if ( chatQueue.size() > 0 ) {
+					try {
+						lastInLine = appObj.popOne( chatQueue );
+					} catch ( Exception e ) {
+						e.printStackTrace();
+						System.out.println( "Failed successfully.");
+						return;
+					}					
+				}
+				// Check if not hosting, pause and unplayer if so
+				if (!obj.pregamehosting() ) {
+					if (!waiting) {
+						obj.sendMessage( "Someone else has host. Pausing execution. Return host and unpause to continue.");
+					}
+					try {
+						obj.playerDown();
+					} catch (Exception e ) {
+						e.printStackTrace();
+						//return;
+					}
+					waiting = true;
 					continue;
 				}
 				long curtime = System.nanoTime();
 				
-				// Prioritize starting the game if there is no time on the clock.
 				// Do an afk check if the lobby is full.
 				if (obj.playerdUp() >= obj.totalPlayers() && !afk) {
 					try {
 						obj.playerDown();
 					} catch (Exception e ) {
 						e.printStackTrace();
-						return;
+						//return;
 					}
 					obj.sendMessage("AFK check 3...2...1..." + Integer.toString( patience ) + " seconds to rejoin.");
 					obj.afkCheck();
@@ -1578,11 +1697,17 @@ public class App {
 							appObj.execute( ".time", auth.get( 0 ) );
 						}
 						else {
-							obj.sendMessage("GLHF! DON'T AFK!");
+							if ( hiddenSetup ) {
+								obj.hideSetupToggle();
+								obj.sendMessage( "Rolling setup...");
+								appObj.execute( ".setup " + currentSetup, auth.get(0 ));								
+							}
+							obj.sendMessage("GLHF! DON'T AFK!");							
 							try {
 								Thread.sleep(2000);
 							} catch (InterruptedException e) {
-							}
+							
+							} 
 							obj.startGame();
 							try {
 								Thread.sleep(500);
@@ -1590,6 +1715,9 @@ public class App {
 							}
 							if ( !obj.gameRunning() ) {
 								obj.sendMessage("Someone unplayered. Let's try again...");
+								if ( hiddenSetup ) {
+									obj.hideSetupToggle();							
+								}
 							}
 							//gameRunning = true;
 						}						
@@ -1608,20 +1736,7 @@ public class App {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}
-				
-				
-				// Update the command queue
-				obj.updateChatSmart( chatQueue, lastInLine );
-				if ( chatQueue.size() > 0 ) {
-					try {
-						lastInLine = appObj.popOne( chatQueue );
-					} catch ( Exception e ) {
-						e.printStackTrace();
-						System.out.println( "Failed successfully.");
-						return;
-					}					
-				}
+				}				
 			}
 		}
 	}

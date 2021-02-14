@@ -8,10 +8,13 @@
 - apologies for the shitty/almost entirely absent documentation and comments
 - yes, I know this code could be optimized greatly
 - to do:
-	- add other semi-open setups from the fandom page
+	- add other semi-open setups
+		-tic-tac-toe from fandom
+		-the named town one from fandom
+		-fano variations
+	- add command to spit out setup code(s)
 	- add a setup class or struct and reorganize code to avoid having to input setup information in like 7 separate places
 	- commands to add: .expand, .despand (figure out how to deal with these intelligently, will probably involve low-level functions to read the size of a setup and current number of players in the room)
-	- functionality to add: .ban [user] (would open a new tab and add user to the ban list, then return to main tab)
 	- functionality to add: autokick users who spam commands (have a set number of commands allowable for each user which decrements to zero and slowly recharges; warn players when low)
 	- functionality to add: allow a list of setup codes to be given for a closed setup
 	- fix and robustify the functions which set day and night length
