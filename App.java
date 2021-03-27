@@ -1470,7 +1470,7 @@ public class App {
 			msg = msg + "Bootcamp (nightstart - adjusted for 8p). Read about it here: https://mafiagg.fandom.com/wiki/Bootcamp";
 		}
 		else if (cur.equals( "dnct")) {
-			msg = msg + "Dreams never come true. Read about it here: https://mafiagg.fandom.com/wiki/Dreams_Never_Come_True";
+			msg = msg + "Dreams Never Come True. Read about it here: https://mafiagg.fandom.com/wiki/Dreams_Never_Come_True";
 		}
 		else if (cur.equals( "jani") ) {
 			msg = msg + "Janitorial. Read about it here: https://mafiagg.fandom.com/wiki/Janitorial";
