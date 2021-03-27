@@ -528,12 +528,12 @@ public class MafiaSession {
 			session.findElement(By.xpath("//button[text()='Room']")).click();
 			Thread.sleep(100);
 			session.findElement(
-					By.xpath("/html/body/div[2]/div/div/div/div/div[2]/div/div[2]/div/div[3]/div/div[1]/input"))
-					.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+					By.xpath("//input[contains( @id, 'id')]")).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
 			Thread.sleep(100);
 			session.findElement(
-					By.xpath("/html/body/div[2]/div/div/div/div/div[2]/div/div[2]/div/div[3]/div/div[1]/input"))
-					.sendKeys(roomName);
+					By.xpath("//input[contains( @id, 'id')]")).sendKeys(roomName);
+					//By.xpath("/html/body/div[2]/div/div/div/div/div[2]/div/div[2]/div/div[3]/div/div[1]/input"))
+					//.sendKeys(roomName);
 			Thread.sleep(100);
 			session.findElement(By.xpath("//span[text()='Save']")).click();
 			Thread.sleep(100);
@@ -551,7 +551,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//div[@class='checkbox']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -568,7 +568,7 @@ public class MafiaSession {
 			session.findElement(By.xpath("//div[text()[contains(.,'Hide setup')] and @class='checkbox-label']"))
 					.click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -585,7 +585,7 @@ public class MafiaSession {
 			session.findElement(
 					By.xpath("//div[text()[contains(.,'Hide roles upon death')] and @class='checkbox-label']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -603,7 +603,8 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//option[@value='off']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			//session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -621,7 +622,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//option[@value='dawnStart']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -639,7 +640,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//option[@value='-1']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -657,7 +658,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//option[@value='51']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -675,7 +676,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//option[@value='3']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -693,7 +694,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//option[@value='0']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -709,7 +710,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//button[@class='icon-shuffle']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -726,7 +727,7 @@ public class MafiaSession {
 			session.findElement(By.xpath("//div[text()[contains(.,'Use no deck')] and @class='checkbox-label']"))
 					.click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			save();
 		} catch (Exception e) {
@@ -761,7 +762,7 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//div[@class='checkbox-label']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			// session.findElement(By.xpath("//div[@class='checkbox-label']")).click();
 			// Thread.sleep(100);
 			// session.findElement(By.xpath("//div[@class='checkbox-label']")).click();
@@ -786,10 +787,10 @@ public class MafiaSession {
 			return false;
 		} catch (ElementClickInterceptedException e) {
 			e.printStackTrace();
-			act.moveToElement(session.findElement(By.xpath("//div[@class='game-checkbox-dropdown']/section[1]/div[1]")))
-					.click().perform();
-			act.moveToElement(session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[1]/div[1]/button")))
-					.click().perform();
+			//act.moveToElement(session.findElement(By.xpath("//div[@class='game-checkbox-dropdown']/section[1]/div[1]")))
+			//		.click().perform();
+			//act.moveToElement(session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[1]/div[1]/button")))
+			//		.click().perform();
 			// System.out.println( "hmm");
 			return true;
 		} catch (Exception e) {
@@ -965,8 +966,11 @@ public class MafiaSession {
 	// }
 
 	public void sendMessage(String str) {
-		session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(str);
-		session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/button")).click();
+		session.findElement(By.xpath("//input[@placeholder='Chat with the group…']")).sendKeys(str);
+		//session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+		//session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(str);
+		session.findElement(By.xpath("//input")).sendKeys(Keys.ENTER);
+		//session.findElement(By.xpath("//button[text()='Send']")).click();
 	}
 
 	public void playerUp() {
@@ -1011,18 +1015,28 @@ public class MafiaSession {
 	}
 
 	public int playerdUp() {
-		return Integer.parseInt(
-				session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[1]/div[2]/span[2]")).getText());
+		
+		return Integer.parseInt( session.findElement(By.xpath("//div[@class='game-top-player-count']")).getAttribute("innerHTML").split( "</span><span>")[1] );
+		
+		//return Integer.parseInt(
+		//		session.findElement(By.xpath("//div[@class='game-top-player-count']")).getText() );
 	}
 
 	public int totalPlayers() {
-		return Integer.parseInt(
-				session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[1]/div[2]/span[3]")).getText());
+		
+		//System.out.println( session.findElement(By.xpath("//div[@class='game-top-player-count']")).getAttribute("innerHTML").split( "</span><span>")[2].split("</span>")[0] );
+		
+		return Integer.parseInt( session.findElement(By.xpath("//div[@class='game-top-player-count']")).getAttribute("innerHTML").split( "</span><span>")[2].split("</span>")[0]  );
+		
+		//System.out.print( session.findElement(By.xpath("//div[@class='game-top-player-count']")).getText() );
+		
+		//return Integer.parseInt(
+		//		session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[1]/div[2]/span[3]")).getText());
 	}
 
 	public void afkCheck() {
 		session.findElement(
-				By.xpath("/html/body/div[1]/main/div/div[1]/div[2]/div/div[3]/div/div[2]/div/div/div/button[1]"))
+				By.xpath("//span[@class='button-contents' and text()='Force all to spectate']"))
 				.click();
 	}
 
@@ -1041,11 +1055,11 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//span[text()='Kick' and @class='button-contents']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			return true;
 		} catch (Exception e) {
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			e.printStackTrace();
 			return false;
 		}
@@ -1114,11 +1128,11 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//button[text()='Transfer host' and @type='button']")).click();
 			Thread.sleep(100);
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			return true;
 		} catch (Exception e) {
-			session.findElement(By.xpath("/html/body/div[1]/main/div/div[2]/div[3]/form/input")).sendKeys(Keys.ESCAPE);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			e.printStackTrace();
 			return false;
 		}

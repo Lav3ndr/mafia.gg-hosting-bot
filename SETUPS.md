@@ -1,0 +1,18 @@
+**Setups**
+
+| Name           | Command   | Info                                          | Players | Start            | Role reveal | Force vote | Majority vote | Extra KP | Deadlock | Hide setup | Codes                            |
+|----------------|-----------|-----------------------------------------------|---------|------------------|-------------|------------|---------------|----------|----------|------------|----------------------------------|
+| Consifom       | .consifom | https://mafiagg.fandom.com/wiki/Consifom      | 3       | night            | on          | no         | 1/2           | off      | init     | no         | 19a1b5a1b61a1                    |
+| 5 Man Con Plan | .conplan  | https://mafiagg.fandom.com/wiki/5_Man_Conplan | 5       | night            | off         | no         | no            | off      | init     | no         | 1547802152a1b18a1b31a1b40a1b52a1 |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          |          |            |                                  |
+|                |           |                                               |         | day (informed)   | alignment   | yes        | 2/3           | 2kp0     | resp     | yes        |                                  |
+|                |           |                                               |         | day (uninformed) |             |            |               | 2kp2     | rand     |            |                                  |
+|                |           |                                               |         |                  |             |            |               |          | off      |            |                                  |

@@ -24,7 +24,7 @@ public class App {
 //	private static long ms = 0;
 	private static boolean afk = false;
 	private static boolean votemode = false; // can players change setup?
-	private static boolean listed = true; //check/uncheck to host listed or unlisted rooms by default
+	private static boolean listed = false; //check/uncheck to host listed or unlisted rooms by default
 	private static boolean rroff = true; // default conplan setting
 	//private static boolean daystart = false;
 	private static boolean hiddenSetup = false; // default conplan setting
