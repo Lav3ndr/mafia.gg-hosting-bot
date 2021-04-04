@@ -1522,20 +1522,22 @@ public class MafiaSession {
 		}
 	}
 
-	public Setup setup(String command) {
+	public Setup setup(String command, Setup curSetup) {
 		System.out.println( command );
-		String[] empty = new String[] {};
-		Setup choice = new Setup( "", "", "", 0, "", "", "", "", "", "", "", empty, "" );
+		//String[] empty = new String[] {};
+		Setup choice = curSetup;
+		boolean newSetup = false;
 		for (int i = 0; i < setups.size(); i++ )
 		{
 			//System.out.println( setups.get( i ).command );
 			//System.out.println( command );
-			if ( setups.get( i ).command.equals( command ) ) {
+			if ( setups.get( i ).command.equals( command ) && !setups.get( i ).command.equals( curSetup.command ) ) {
 				//System.out.println( "match");
 				choice = setups.get( i );
+				newSetup = true;
 			}
 		}
-		if ( choice.name.equals( "" ) ) {
+		if ( !newSetup ) {
 				return choice;
 		}
 		

@@ -29,6 +29,7 @@ public class App {
 	private static String summoner = "";
 	//private static boolean standingBy = true; // used in helphost mode when waiting for host
 	private static boolean toldToLeave = false;
+	private static long hostPatience = 60;
 	private static boolean lockdeck = false;
 	private static boolean votemode = false; // can players change setup?
 	private static boolean listed = false; //check/uncheck to host listed or unlisted rooms by default
@@ -44,7 +45,7 @@ public class App {
 	private static boolean waiting = false;
 	private static int votethreshold = 3;
 	private static long timerstart = System.nanoTime();
-	private static long timeToStart = 60;
+	private static long timeToStart = 0;
 	private static long timeResets = 0;
 	public static int deckChanges;
 	public static int changes;
@@ -240,7 +241,13 @@ public class App {
 			}			
 			obj.startGame();
 			obj.sendMessage("Room terminated.");
-			throw new Exception( "Terminating execution.");
+			if ( command.equals(".exit") ) {
+				throw new Exception( "Terminating execution.");
+			}
+			else {
+				toldToLeave = true;
+				obj.goHome();				
+			}
 		}
 		else if ( command.equalsIgnoreCase(".host") && ( authorized || ( !autoHost && tempAuthorized ) ) ){
 			obj.giveHost(user);
@@ -519,7 +526,7 @@ public class App {
 			obj.sendMessage( displayVotes() );
 		} else if (command.startsWith(".setup ") && tempAuthorized) {
 			command = command.replace(".setup ", "");
-			currentSetup = obj.setup( command );
+			currentSetup = obj.setup( command, currentSetup );
 			obj.changeRoomName(currentSetup.name+autoHostText);
 			displayInfo( currentSetup );
 		}
@@ -1707,13 +1714,16 @@ public class App {
 			if ( autoHost ) {
 				appObj.intro();
 			}
-			else {
+			else if ( !autoHost && !obj.gameRunning() ) {
 				appObj.greet( summoner );
 			}
+			if (!obj.gameRunning() ) {
+				appObj.resetVotes();
+				appObj.hardResetTimer();
+				appObj.resetDeckChanges();
+			}
 			
-			appObj.resetVotes();
-			appObj.hardResetTimer();
-			appObj.resetDeckChanges();
+			
 			
 			try {
 				Thread.sleep(2000);
@@ -1732,6 +1742,7 @@ public class App {
 			}
 			
 			long starttime = 0;
+			long losthosttime = System.nanoTime();
 			int patience = 15;
 			//gameRunning = false;
 			while (true) {
@@ -1744,8 +1755,14 @@ public class App {
 				if ( autoHost && obj.gameRunning() ) {
 					continue;
 				}
-				// If !autoHost and game running or told to leave, quit to main lobby
-				if ( !autoHost && ( obj.gameRunning() || toldToLeave ) ){
+				// If !autoHost and game running or told to leave, or not host for a while, quit to main lobby
+				if ( !autoHost && ( ( obj.gameRunning() || toldToLeave ) || ( System.nanoTime() - losthosttime ) / 1000000000 > hostPatience ) ){
+					if ( ( System.nanoTime() - losthosttime ) / 1000000000 > hostPatience ) {
+						obj.sendMessage( "Hosting control lost for "+ Long.toString( hostPatience ) + " seconds. Please summon me again if you need me.");
+					}
+					if ( !obj.gameRunning() && obj.pregamehosting() ) {
+						obj.giveHost( summoner );
+					}
 					obj.goHome();	
 					break;
 				}
@@ -1759,6 +1776,7 @@ public class App {
 						if ( autoHost ) {
 							obj.sendMessage( "Someone else has host. Pausing execution. Return host to continue.");
 						}
+						losthosttime = System.nanoTime();
 					}
 					try {
 						obj.playerDown();
@@ -1790,6 +1808,10 @@ public class App {
 						System.out.println( "Failed successfully.");
 						return;
 					}					
+				}
+				
+				if ( toldToLeave ) {
+					break;
 				}
 				
 				// grab system time
