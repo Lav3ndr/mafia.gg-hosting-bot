@@ -18,17 +18,27 @@ public class App {
 		add( "Lavender" );
 		add( "zbruh" );
 	}};
+	private static List<String> tempAuth = new ArrayList<String>();
 	
 	private static Map<String, ArrayList<String>> votes = new HashMap<String, ArrayList<String>>();
 	
 //	private static long ms = 0;
 	private static boolean afk = false;
+	private static boolean autoHost = false; // wait to be summoned (false), or host rooms automatically (true)?
+	private static String summonPhrase = ".helphost";
+	private static String summoner = "";
+	//private static boolean standingBy = true; // used in helphost mode when waiting for host
+	private static boolean toldToLeave = false;
+	private static boolean lockdeck = false;
 	private static boolean votemode = false; // can players change setup?
 	private static boolean listed = false; //check/uncheck to host listed or unlisted rooms by default
 	private static boolean rroff = true; // default conplan setting
 	//private static boolean daystart = false;
 	private static boolean hiddenSetup = false; // default conplan setting
-	private static String currentSetup = "conplan";
+	
+	//String[] empty = new String[] {};
+	private static Setup currentSetup = new Setup( "", "", "", 0, "", "", "", "", "", "", "", new String[] {}, "" );
+	//private static String currentSetup = "conplan";
 	//private static int setupSize = 0;
 	private static String autoHostText = "";//" (autohosted)";
 	private static boolean waiting = false;
@@ -38,6 +48,7 @@ public class App {
 	private static long timeResets = 0;
 	public static int deckChanges;
 	public static int changes;
+	
 	
 	public void resetDeckChanges() {
 		Random rand = new Random();
@@ -186,22 +197,34 @@ public class App {
 		//}
 		//return false;
 	}
+	
+	public boolean isTempAuthorized( String user ) {
+		//boolean authorized = false;
+		//if ( !chat.get(i).equals( ".exit" ) && !chat.get(i).equals( ".wait" ) && !chat.get(i).equals( ".continue" ) && !chat.get(i).equals( ".continue" )&& !chat.get(i).equals( ".listtoggle" )) {
+		//	authorized = true;
+		//}
+		return tempAuth.contains( user ) || isAuthorized( user );
+		//for (int j = 0; j < auth.size(); j++) {
+		//	if ( user.equals( auth.get( j ) ) ){
+		//	//System.out.println( "hmmm");
+		//		return true;
+		//	}
+		//}
+		//return false;
+	}
+	
+	
  
 	public void execute(String command, String user) throws Exception {
 		boolean authorized = isAuthorized( user );
+		boolean tempAuthorized = isTempAuthorized( user );
 		if (command.equals(".intro") && authorized)
 			intro();
-		else if (command.equals(".exit") && authorized) {
-			obj.nightStart();
-			obj.majOff();
-			if ( hiddenSetup ) {
-				obj.hideSetupToggle();
-				hiddenSetup = false;
-			}
-			if ( !rroff ) {
-				obj.rroffToggle();
-				rroff = true;
-			}
+		else if ( ( command.equals(".exit") && authorized ) || ( command.equals(".nukeroom") && tempAuthorized ) ) {
+			//obj.setStart( "night" );
+			//obj.setMajority( "off" );
+			//obj.setHidden("off");
+			//obj.setRR("off");
 			obj.setSetup( "" );
 			try {
 				obj.playerDown();
@@ -216,12 +239,15 @@ public class App {
 			} catch (InterruptedException e) {
 			}			
 			obj.startGame();
-			obj.sendMessage("Thanks for playing everyone! Signing off...");
+			obj.sendMessage("Room terminated.");
 			throw new Exception( "Terminating execution.");
 		}
-		else if (command.equalsIgnoreCase(".host") && authorized) {
+		else if ( command.equalsIgnoreCase(".host") && ( authorized || ( !autoHost && tempAuthorized ) ) ){
 			obj.giveHost(user);
-			obj.sendMessage( "Hosting duty passed to " + user + "." );
+			obj.sendMessage( "Hosting duty passed to " + user + ". Pass host back for additional help selecting the setup." );
+		}
+		else if ( command.equalsIgnoreCase( ".kickbot" ) && !autoHost && tempAuthorized ) {
+			toldToLeave = true;
 		}
 		else if (command.equalsIgnoreCase(".democracy") && authorized) {
 			votemode = !votemode;
@@ -233,7 +259,7 @@ public class App {
 				obj.sendMessage( "Democracy disabled." );
 			}
 		}
-		else if (command.startsWith(".kick ") && authorized) {
+		else if (command.startsWith(".kick ") && tempAuthorized) {
 			command = command.replace(".kick ", "");
 			//obj.sendMessage( "Kicking user: " + command);
 			if ( obj.kick( command ) ) {
@@ -254,17 +280,20 @@ public class App {
 			obj.sendMessage( Integer.toString( onlyneed ) + " more" );
 		}
 		else if (command.equalsIgnoreCase(".info")) {
+			if ( currentSetup.name.equals( "" ) ) {
+				obj.sendMessage( "The bot must change the setup at least once in order to use this command." );
+			}
 			displayInfo( currentSetup );
 		}
-		else if (command.startsWith(".info ") && votemode ) {
-			command = command.replace(".info ", "");
-			if (!votes.containsKey( command )) {
-				obj.sendMessage( "'" + command + "' is not a valid setup code.");
-			}
-			displayInfo( command );
-		}
+		//else if (command.startsWith(".info ") && votemode ) {
+		//	command = command.replace(".info ", "");
+		//	if (!votes.containsKey( command )) {
+		//		obj.sendMessage( "'" + command + "' is not a valid setup code.");
+		//	}
+			//displayInfo( command );
+		//}
 		else if (command.equalsIgnoreCase(".credits")) {
-			obj.sendMessage( "This bot was programmed in Java by Lavender (Lavender#8704 on Discord), though the original code was written and given to him by someone else. It uses a library called Selenium (https://www.selenium.dev/) to open a browser and interact with it by referencing the source html. Poorly-documented source code is available on Github - contact Lavender if interested.");			
+			obj.sendMessage( "This bot was programmed in Java by Lavender (Lavender#8704 on Discord), though the original code was written and given to him by someone else. It uses a library called Selenium (https://www.selenium.dev/) to open a browser and interact with it by referencing the source html. Poorly-documented source code available here: https://github.com/Lav3ndr/mafia.gg-hosting-bot");			
 		}
 		else if (command.equalsIgnoreCase(".garbageman")) {
 			obj.sendMessage("gotta figure out how to get off my butt and work on my real side projects");
@@ -377,22 +406,50 @@ public class App {
 			obj.listToggle();
 		}
 		else if (command.equalsIgnoreCase(".randomdeck") && deckChanges - changes > 0 ) {
+			if ( lockdeck ) {
+				obj.sendMessage( "Deck is locked." );
+				return;
+			}
 			obj.randomDeck();
 			obj.sendMessage( user + " chose a random deck.");
 			incChanges();
 			
 		}
 		else if (command.equalsIgnoreCase(".nodeck") && deckChanges - changes > 0 ) {
+			if ( lockdeck ) {
+				obj.sendMessage( "Deck is locked." );
+				return;
+			}
 			obj.noDeck();
 			obj.sendMessage( user + " chose to use no deck.");
 			incChanges();
 		}
 		else if (command.startsWith(".deck ") && deckChanges - changes > 0 ) {
+			if ( lockdeck ) {
+				obj.sendMessage( "Deck is locked." );
+				return;
+			}
 			command = command.replace(".deck ", "");
 			if ( obj.setDeck( command ) )
 			{
 				obj.sendMessage( user + " has successfully set the deck.");
 				incChanges();
+			}
+			else {
+				obj.sendMessage( "Unable to process deck request from "+user+". Deck selection is case-sensitive and must contain the exact string specified." );
+			}			
+		}
+		else if ( command.equalsIgnoreCase(".locknodeck") && tempAuthorized ) {
+			obj.noDeck();
+			obj.sendMessage( user + " has successfully set the deck, and the deck has been locked.");
+			lockdeck = true;
+		}
+		else if ( command.startsWith(".lockdeck ") && tempAuthorized ) {
+			command = command.replace(".lockdeck ", "");
+			if ( obj.setDeck( command ) )
+			{
+				obj.sendMessage( user + " has successfully set the deck, and the deck has been locked.");
+				lockdeck = true;
 			}
 			else {
 				obj.sendMessage( "Unable to process deck request from "+user+". Deck selection is case-sensitive and must contain the exact string specified." );
@@ -460,9 +517,13 @@ public class App {
 			resetVotes();			
 		} else if (command.equalsIgnoreCase(".showvotes") && votemode ) {
 			obj.sendMessage( displayVotes() );
-		} else if (command.startsWith(".setup ") && authorized) {
+		} else if (command.startsWith(".setup ") && tempAuthorized) {
 			command = command.replace(".setup ", "");
-			if (command.equalsIgnoreCase("single")) {
+			currentSetup = obj.setup( command );
+			obj.changeRoomName(currentSetup.name+autoHostText);
+			displayInfo( currentSetup );
+		}
+			/*if (command.equalsIgnoreCase("single")) {
 				currentSetup = "single";
 				obj.noextrakp();
 				obj.nightStart();
@@ -1356,8 +1417,8 @@ public class App {
 			    String randomElement = MafiaSession.REVERSEROULETTE15.get(rand.nextInt(MafiaSession.REVERSEROULETTE15.size()));
 				obj.setSetup( randomElement );
 				displayInfo( currentSetup );
-			}	
-		} else if (command.equalsIgnoreCase(".help")) {
+			}*/	
+		else if (command.equalsIgnoreCase(".help")) {
 			help();
 		} else if (command.startsWith(".roomName ") && authorized) {
 			command = command.replace(".roomName ", "");
@@ -1417,17 +1478,30 @@ public class App {
 //		obj.sendMessage(
 //				"Majority Codes - nm= Turned off, sm = Simple Majority, 2 = Two-Thirds Majority and 3 = Three-Quarters Majority");
 		//obj.sendMessage("Available Commands : .intro | .setDayTime [3-13] | .feedback [feedback] | .afkCheck");
+		obj.sendMessage( "See https://github.com/Lav3ndr/mafia.gg-hosting-bot/blob/main/SETUPS.md for available setups.");
 		if ( votemode ) {
-			obj.sendMessage( "Use this syntax to vote for a setup: '.vote [setup code]' (e.g. '.vote pie7')"  );
-			obj.sendMessage( "Open setup codes : consifom | dethy | conplan | conplan+ | lovers | stc | camerashy | pie7 | bootcamp | gnh | pie7+ | bootcamp+ | sweetdreams | gnightless | voltronmicro | dnct | jani | abc | ascension | how2mm | oneshotcops | triplecamp | multemplar | uncertainty | powervilly13 | whiteflag | allstars13 | circus | allstars15 | solobombs | fatedduo | ibern | lizardrroff | masonrelay | powermillers | shobombs | vip | congress | basic20 | pie25" );
-			obj.sendMessage( "Semi-open/closed setup codes : superposition | carbon14 | revrol7 | matrix6 | notnot | newd3 | revrol11 | mafiajjani | sodium24 | revrol15 | allstarssemi  /\\/\\/\\   Try these commands, too! : .help | .info | .info [setup code] | .showvotes | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits");
-		} else {
-			obj.sendMessage( "Available commands : .help | .info | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits" );
+			obj.sendMessage( "Use this syntax to vote for a setup: '.vote [SETUP COMMAND]' (e.g. '.vote pie7')."  );
+			obj.sendMessage( "Try these commands, too! : .help | .info | .info [SETUP COMMAND] | .showvotes | .deck [DECK (case sensitive)] | .randomdeck | .nodeck | .impatient | .time | .credits");
+			//obj.sendMessage( "Open setup codes : consifom | dethy | conplan | conplan+ | lovers | stc | camerashy | pie7 | bootcamp | gnh | pie7+ | bootcamp+ | sweetdreams | gnightless | voltronmicro | dnct | jani | abc | ascension | how2mm | oneshotcops | triplecamp | multemplar | uncertainty | powervilly13 | whiteflag | allstars13 | circus | allstars15 | solobombs | fatedduo | ibern | lizardrroff | masonrelay | powermillers | shobombs | vip | congress | basic20 | pie25" );
+			//obj.sendMessage( "Semi-open/closed setup codes : superposition | carbon14 | revrol7 | matrix6 | notnot | newd3 | revrol11 | mafiajjani | sodium24 | revrol15 | allstarssemi  /\\/\\/\\   Try these commands, too! : .help | .info | .info [setup code] | .showvotes | .deck [deck] | .randomdeck | .nodeck | .impatient | .time | .credits");
+		} else if ( autoHost ){
+			obj.sendMessage( "Other available commands : .help | .info | .info [SETUP COMMAND] | .deck [DECK (case sensitive)] | .randomdeck | .nodeck | .impatient | .time | .credits" );
+		} else if ( !autoHost ){
+			obj.sendMessage( "Other available commands (any user): .help | .info | .deck [DECK (case sensitive)] | .randomdeck | .nodeck | .impatient | .credits" );
+			obj.sendMessage( "Other available commands (original host only): .host | .lockdeck [DECK (case sensitive)] | .locknodeck | .kick [PLAYER] | .kickbot | .nukeroom" );
 		}
 	}
 	
-	public void displayInfo( String cur ) {
-		String msg = "This setup is called ";
+	public void displayInfo( Setup cur ) {
+		String msg = "This setup is called " + cur.name + ". Read about it here: " + cur.url;
+		if ( !cur.notes.equals( "" ) ) {
+			msg = msg + ". " + cur.notes;
+		}
+		obj.sendMessage(msg);
+	}
+	/*
+	public void displayInfoOld( Setup cur ) {
+
 		if (cur.equals( "single") ) {
 			msg = msg + "DEBUGGING";
 		}
@@ -1583,35 +1657,60 @@ public class App {
 			msg = msg + "Reverse Roulette. It is a semi-open setup with 2 possibilities. The currently shown setup is only one of the possibilities. SPECIAL RULES: 1) TRAITOR WINS WITH KILLER 2) TOWN WINS ALONE IF MERLIN LIVES UNTIL FINAL 2. More info here: https://mafiagg.fandom.com/wiki/Reverse_roulette";
 		}	
 		obj.sendMessage(msg);
-	}
+	} */
  
 	public static void main(String[] args) {
 		boolean firstTime = true;
+		
 		//boolean gameRunning = false;
 		while (true) {
-			
+			currentSetup = new Setup( "", "", "", 0, "", "", "", "", "", "", "", new String[] {}, "" );
+			waiting = false;
+			//standingBy = true;
+			summoner = "";
+			tempAuth = new ArrayList<String>();
+			toldToLeave = false;
+			lockdeck = false;
 			afk = false;
 			App appObj = new App();
-			if ( firstTime ) {
+			if ( firstTime && autoHost ) {
 				obj.hostUnlisted();
 				obj.soundOff();
-				
 			}
-			// unhide the setup until game start
-			else {
-				if ( hiddenSetup ) {
-					obj.hideSetupToggle();
+			else if ( !autoHost ) {
+				// wait on main page until summoned
+				while (true ) {
+					summoner = obj.summoned( summonPhrase );
+					if ( summoner != "" ){
+						if ( !tempAuth.contains( summoner ) ){
+							tempAuth.add( summoner );
+						}						
+						break;
+					}
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+					}
+					obj.refresh();
 				}
 			}
 			
+			// unhide the setup until game start
+			obj.setHidden("off");
+
 			List<List<String>> chatQueue = new ArrayList<List<String>>();
 			List<String> lastInLine = new ArrayList<String>();
 			lastInLine.add( "" );
 			lastInLine.add( "" );
 			lastInLine.add( "" );
 			
+			if ( autoHost ) {
+				appObj.intro();
+			}
+			else {
+				appObj.greet( summoner );
+			}
 			
-			appObj.intro();
 			appObj.resetVotes();
 			appObj.hardResetTimer();
 			appObj.resetDeckChanges();
@@ -1620,45 +1719,46 @@ public class App {
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 			}
-			try {
-				appObj.execute(".setup " + currentSetup, auth.get( 0 ) );
-				appObj.execute(".time",  auth.get( 0 ) );
-			} catch (Exception e ) {
-				return;
-			}
-
-			if ( listed ){
-				obj.listToggle(); // always makes listed?
+			if ( autoHost ) {
+				try {
+					appObj.execute(".setup " + currentSetup, auth.get( 0 ) );
+					appObj.execute(".time",  auth.get( 0 ) );
+				} catch (Exception e ) {
+					return;
+				}
+				if ( listed ){
+					obj.listToggle(); // always makes listed?
+				}
 			}
 			
 			long starttime = 0;
 			int patience = 15;
 			//gameRunning = false;
 			while (true) {
-				// Try to host a new room if possible
-				if ( obj.tryHostNew() ) {
+				// If autoHost, try to host a new room if possible
+				if ( autoHost && obj.tryHostNew() ) {
 					firstTime = false;
 					break;
 				}
-				// Continue if the game is running
-				if (obj.gameRunning() ) {
+				// If autoHost, continue if the game is running 
+				if ( autoHost && obj.gameRunning() ) {
 					continue;
 				}
-				// Update the command queue and execute next command
-				obj.updateChatSmart( chatQueue, lastInLine );
-				if ( chatQueue.size() > 0 ) {
-					try {
-						lastInLine = appObj.popOne( chatQueue );
-					} catch ( Exception e ) {
-						e.printStackTrace();
-						System.out.println( "Failed successfully.");
-						return;
-					}					
+				// If !autoHost and game running or told to leave, quit to main lobby
+				if ( !autoHost && ( obj.gameRunning() || toldToLeave ) ){
+					obj.goHome();	
+					break;
 				}
+				
+				// Update the command queue
+				obj.updateChatSmart( chatQueue, lastInLine );
+				
 				// Check if not hosting, pause and unplayer if so
-				if (!obj.pregamehosting() ) {
+				if ( !obj.pregamehosting() ) {
 					if (!waiting) {
-						obj.sendMessage( "Someone else has host. Pausing execution. Return host and unpause to continue.");
+						if ( autoHost ) {
+							obj.sendMessage( "Someone else has host. Pausing execution. Return host to continue.");
+						}
 					}
 					try {
 						obj.playerDown();
@@ -1669,6 +1769,30 @@ public class App {
 					waiting = true;
 					continue;
 				}
+				else {
+					if ( waiting ) {
+						if ( autoHost ) {
+							obj.sendMessage( "Thank you for giving host back. Resuming execution.");
+						}
+						else {
+							appObj.hostHelp2( summoner );					
+						}
+					}
+					waiting = false;
+				}
+				
+				// execute the next command
+				if ( chatQueue.size() > 0 ) {
+					try {
+						lastInLine = appObj.popOne( chatQueue );
+					} catch ( Exception e ) {
+						e.printStackTrace();
+						System.out.println( "Failed successfully.");
+						return;
+					}					
+				}
+				
+				// grab system time
 				long curtime = System.nanoTime();
 				
 				// Do an afk check if the lobby is full.
@@ -1681,7 +1805,9 @@ public class App {
 					}
 					obj.sendMessage("AFK check 3...2...1..." + Integer.toString( patience ) + " seconds to rejoin.");
 					obj.afkCheck();
-					appObj.displayInfo( currentSetup );
+					if ( !currentSetup.name.equals( "" ) ){
+						appObj.displayInfo( currentSetup );
+					}					
 					afk = !afk;
 					starttime = System.nanoTime();				
 				}
@@ -1697,10 +1823,10 @@ public class App {
 							appObj.execute( ".time", auth.get( 0 ) );
 						}
 						else {
-							if ( hiddenSetup ) {
-								obj.hideSetupToggle();
-								obj.sendMessage( "Rolling setup...");
-								appObj.execute( ".setup " + currentSetup, auth.get(0 ));								
+							if ( currentSetup.hidden.equals( "on" ) ) {
+								obj.setHidden("on");
+								obj.sendMessage( "Rolling and hiding setup...");
+								appObj.execute( ".setup " + currentSetup, auth.get( 0 ));								
 							}
 							obj.sendMessage("GLHF! DON'T AFK!");							
 							try {
@@ -1715,9 +1841,7 @@ public class App {
 							}
 							if ( !obj.gameRunning() ) {
 								obj.sendMessage("Someone unplayered. Let's try again...");
-								if ( hiddenSetup ) {
-									obj.hideSetupToggle();							
-								}
+								obj.setHidden( "off" );
 							}
 							//gameRunning = true;
 						}						
@@ -1740,7 +1864,17 @@ public class App {
 			}
 		}
 	}
+
+	private void greet(String summoner) {
+		obj.sendMessage( "Hello " + summoner + ". I joined your room because you started your room name with '.helphost'. I can help you host any of the setups available here: https://github.com/Lav3ndr/mafia.gg-hosting-bot/blob/main/SETUPS.md. Pass host to me to begin." );
+	}
 	
+	private void hostHelp2( String summoner ) {
+		obj.sendMessage( "Thank you, " + summoner + "! Type '.setup [SETUP COMMAND]' (e.g. '.setup jani') to change the setup.");
+		obj.sendMessage( "The setup command for each setup can be found in the second column of the setup table. When you have settled on a setup, you may either type '.host' to reclaim host from me, or you may leave me as host. I will automatically do an afk check and host the game for you when the lobby fills. Type '.help' to see additional commands." );
+		// TODO Auto-generated method stub		
+	}
+
 	public List<String> popOne( List<List<String>> chat ) throws Exception {
 		int size = chat.size();
 		List<String> lastInLine = new ArrayList<String>();

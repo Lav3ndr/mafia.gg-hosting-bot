@@ -5,12 +5,14 @@ package mafia.gg.bot;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
+//import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -33,6 +35,10 @@ public class MafiaSession {
 	private boolean unlistedMemory;
 	// private String setInUse;
 	// private List<WebElement> chat, usn;
+	
+	private List<Setup> setups;	
+	
+	/*
 	public static final int TWO_THIRDS_MAJORITY = 66;
 	public static final int TURNED_OFF = -1;
 	public static final int SIMPLE_MAJORITY = 51;
@@ -204,7 +210,7 @@ public class MafiaSession {
 			add("106a10b57a3b1596416878a1b56a1");
 			add("106a3b57a10b98a1b1600386374a1");
 		}
-	};
+	}; */
 
 	private MafiaSession() {
 		System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
@@ -232,6 +238,9 @@ public class MafiaSession {
 		// this.setInUse = "";
 		// this.chat = new ArrayList<WebElement>();
 		// this.usn = new ArrayList<WebElement>();
+		
+		this.setups = readSetups();
+		
 		session = new ChromeDriver();
 		session.manage().window().maximize();
 		session.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -242,6 +251,86 @@ public class MafiaSession {
 		session.findElement(By.xpath("//button[@type='submit']")).click();
 		act = new Actions(session);
 		session.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+	}
+
+	private List<Setup> readSetups() {
+		List<Setup> setups = new ArrayList<Setup>();
+		try {
+			// open .md file containing setups
+			File myObj = new File("src\\mafia\\gg\\bot\\SETUPS.md");
+			Scanner myReader = new Scanner(myObj);
+			String data = "";
+			for (int i = 0; i < 5; i++) {
+				data = myReader.nextLine();
+			}
+			// read open setups
+			//String[] listdata;
+			while ( data != "" ) {
+				Setup curSetup = createSetup( data );
+				//System.out.println( data );
+				//listdata = data.split( "\\|" );
+				//System.out.println( listdata.length );
+				//int codeIndex = 11;
+				//for ( int j = 0; j < listdata.length - 1; j++ ) {
+					
+				//	listdata[j] = listdata[j+1].strip();
+				//	System.out.println( listdata[j] );
+					
+				//}
+				
+				//String[] curCodes;
+				//curCodes = listdata[codeIndex].split(",");
+				//System.out.println( listdata[3] );
+				
+				//Setup curSetup = new Setup( listdata[0], listdata[1], listdata[2], Integer.parseInt( listdata[3] ), listdata[4], listdata[5], listdata[6], listdata[7], listdata[8], listdata[9], listdata[10], curCodes, listdata[12] );
+				setups.add( curSetup ); 
+				//System.out.println( data );
+				data = myReader.nextLine();
+			}
+			
+			// skip space between tables
+			for (int i = 0; i < 5; i++) {
+				data = myReader.nextLine();
+			}
+			
+			// read and create semi-open setups
+			while ( true ) {
+				Setup curSetup = createSetup( data );
+				setups.add( curSetup );
+				try {
+					data = myReader.nextLine();
+				} catch ( Exception e ){
+					e.printStackTrace();
+					break;
+				}
+			}
+			
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("Setup file not found. Check path.");
+			e.printStackTrace();
+		}
+		return setups;
+	}
+
+	private Setup createSetup(String data) {
+		//System.out.println( data );
+		String[] listdata = data.split( "\\|" );
+		//System.out.println( listdata.length );
+		int codeIndex = 11;
+		for ( int j = 0; j < listdata.length - 1; j++ ) {
+			
+			listdata[j] = listdata[j+1].strip();
+			//System.out.println( listdata[j] );
+			
+		}
+		
+		String[] curCodes;
+		curCodes = listdata[codeIndex].split(",");
+		//System.out.println( listdata[3] );
+		
+		Setup setup = new Setup( listdata[0], listdata[1], listdata[2], Integer.parseInt( listdata[3] ), listdata[4], listdata[5], listdata[6], listdata[7], listdata[8], listdata[9], listdata[10], curCodes, listdata[12] );
+		return setup;
 	}
 
 	public static MafiaSession newSession() {
@@ -558,7 +647,9 @@ public class MafiaSession {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
+	/*
 	public void hideSetupToggle() {
 		try {
 			session.findElement(By.xpath("//span[text()='Edit options']")).click();
@@ -575,8 +666,9 @@ public class MafiaSession {
 			e.printStackTrace();
 		}
 	}
+	*/
 
-	public void rroffToggle() {
+	/*public void rroffToggle() {
 		try {
 			session.findElement(By.xpath("//span[text()='Edit options']")).click();
 			Thread.sleep(100);
@@ -591,8 +683,63 @@ public class MafiaSession {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}*/
+	
+	public void setRR( String rr ) {
+		assert rr.equals( "off" ) || rr.equals( "on" ) || rr.equals( "align" );
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//button[text()='Game']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//label[text()[contains(.,'Reveal roles upon death')]]")).click();
+			Thread.sleep(100);
+			if ( rr.equals( "off" ) ) {
+				session.findElement(By.xpath("//option[@value='noReveal']")).click();
+			}
+			else if ( rr.equals( "on" ) ) {
+				session.findElement(By.xpath("//option[@value='allReveal']")).click();
+			}
+			else if ( rr.equals( "align" ) ) {
+				session.findElement(By.xpath("//option[@value='alignmentReveal']")).click();
+			}			
+			Thread.sleep(100);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			Thread.sleep(100);
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
-
+	
+	public void setStart( String start ) {
+		assert start.equals( "night" ) || start.equals( "informed day" ) || start.equals( "uninformed day" );
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//button[text()='Game']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//label[text()[contains(.,'Start with day')]]")).click();
+			Thread.sleep(100);
+			if ( start.equals( "night" ) ) {
+				session.findElement(By.xpath("//option[@value='off']")).click();
+			}
+			else if ( start.equals( "informed day" ) ) {
+				session.findElement(By.xpath("//option[@value='dawnStart']")).click();
+			}
+			else if ( start.equals( "uninformed day" ) ) {
+				session.findElement(By.xpath("//option[@value='dayStart']")).click();
+			}			
+			Thread.sleep(100);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			Thread.sleep(100);
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+/*
 	public void nightStart() {
 		try {
 			session.findElement(By.xpath("//span[text()='Edit options']")).click();
@@ -628,9 +775,140 @@ public class MafiaSession {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	} */
+	
+	public void setMajority( String maj ) {
+		assert maj.equals( "off") || maj.equals( "1/2") || maj.equals( "2/3") || maj.equals( "3/4");
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//button[text()='Game']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//label[text()[contains(.,'Finalize vote on majority')]]")).click();
+			Thread.sleep(100);
+			if (maj.equals( "off") ) {
+				session.findElement(By.xpath("//option[@value='-1']")).click();
+			}
+			if (maj.equals( "1/2") ) {
+				session.findElement(By.xpath("//option[@value='51']")).click();
+			}
+			if (maj.equals( "2/3") ) {
+				session.findElement(By.xpath("//option[@value='66']")).click();
+			}
+			if (maj.equals( "3/4") ) {
+				session.findElement(By.xpath("//option[@value='75']")).click();
+			}
+			Thread.sleep(100);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			Thread.sleep(100);
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	public void setDeadlock( String deadlock ) {
+		assert deadlock.equals( "rand") || deadlock.equals( "init") || deadlock.equals( "resp") || deadlock.equals( "disable");
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//button[text()='Game']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//label[text()[contains(.,'Deadlock prevention')]]")).click();
+			Thread.sleep(100);
+			if (deadlock.equals( "rand") ) {
+				session.findElement(By.xpath("//option[text()[contains(.,'Punish')] and @value='-1']")).click();
+			}
+			if (deadlock.equals( "init") ) {
+				session.findElement(By.xpath("//option[text()[contains(.,'Punish')] and @value='5']")).click();
+			}
+			if (deadlock.equals( "resp") ) {
+				session.findElement(By.xpath("//option[text()[contains(.,'Punish')] and @value='6']")).click();
+			}
+			if (deadlock.equals( "disable") ) {
+				session.findElement(By.xpath("//option[text()[contains(.,'Disable')] and @value='-2']")).click();
+			}
+			Thread.sleep(100);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			Thread.sleep(100);
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	public void setForceVote( String force ) {
+		assert force.equals( "off" ) || force.equals( "on" );
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//button[text()='Game']")).click();
+			Thread.sleep(100);
+			List<WebElement> checkboxes = session.findElements(By.xpath("//input[@type='checkbox']" ));
+			List<WebElement> checkboxesClickable = session.findElements(By.xpath("//div[@class='checkbox-label']" ));
+			WebElement forceVoteBox = checkboxes.get( 2 );
+			WebElement forceVoteBoxClickable = checkboxesClickable.get( 2 );
+			System.out.println( forceVoteBoxClickable.getAttribute( "innerHTML") );
+			
+			System.out.println("attribute check:" + forceVoteBox.getAttribute( "checked" ) );
+			System.out.println("isSelected:" + forceVoteBox.isSelected() );
+			//for ( int i = 0; i < checkboxes.size(); i++) {	
+		//		System.out.println( checkboxes.get( i ).getAttribute( "innerHTML") );
+			//	System.out.println("The checkbox is selection state is - " + checkboxes.get( i ).isSelected() );
+			//	if ( checkboxes.get( i ).getAttribute( "innerHTML").contains( "Force vote" ) ){
+					//System.out.println( checkboxes.get( i ).getAttribute( "innerHTML") );///)[contains(.,'Force vote')] and @class='checkbox-label']"));
+			//		forceVoteBox = checkboxes.get( i );
+					//System.out.println("The checkbox is selection state is - " + forceVoteBox.getAttribute( "checked" ) );
+			//		System.out.println("The checkbox is selection state is - " + forceVoteBox.isSelected() );
+		//		}
+		//	}
+			
+			if ( force.equals( "off" ) && forceVoteBox.isSelected() ) {
+				forceVoteBoxClickable.click();
+			}
+			else if ( force.equals( "on" ) && !forceVoteBox.isSelected() ) {
+				forceVoteBoxClickable.click();
+			}		
+			Thread.sleep(100);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			Thread.sleep(100);
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	public void setHidden( String hiddenSetup ) {
+		assert hiddenSetup.equals( "off" ) || hiddenSetup.equals( "on" );
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//button[text()='Game']")).click();
+			Thread.sleep(100);
+			List<WebElement> checkboxes = session.findElements(By.xpath("//input[@type='checkbox']" ));
+			List<WebElement> checkboxesClickable = session.findElements(By.xpath("//div[@class='checkbox-label']" ));
+			WebElement hideSetupBox = checkboxes.get( 4 );
+			WebElement hideSetupBoxClickable = checkboxesClickable.get( 4 );
+			//System.out.println( hideSetupBoxClickable.getAttribute( "innerHTML") );
+			
+			
+			if ( hiddenSetup.equals( "off" ) && hideSetupBox.isSelected() ) {
+				hideSetupBoxClickable.click();
+			}
+			else if ( hiddenSetup.equals( "on" ) && !hideSetupBox.isSelected() ) {
+				hideSetupBoxClickable.click();
+			}		
+			Thread.sleep(100);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			Thread.sleep(100);
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 
-	public void majOff() {
+
+	/* public void majOff() {
 		try {
 			session.findElement(By.xpath("//span[text()='Edit options']")).click();
 			Thread.sleep(100);
@@ -664,9 +942,51 @@ public class MafiaSession {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	} */
+	
+	public void setkp( String kp ) {
+		assert kp.equals( "off") || kp.equals( "always") || kp.equals( "2kp1") || kp.equals( "2kp2") || kp.equals( "2kp3") || kp.equals( "2kp4") || kp.equals( "2kp5") || kp.equals( "2kp5");
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//button[text()='Game']")).click();
+			Thread.sleep(100);
+			session.findElement(By.xpath("//label[text()[contains(.,'Extra mafia kill power')]]")).click();
+			Thread.sleep(100);
+			if ( kp.equals( "off") ) {
+				session.findElement(By.xpath("//option[@value='0']")).click();
+			}
+			if ( kp.equals( "always") ) {
+				session.findElement(By.xpath("//option[@value='1']")).click();
+			}
+			if ( kp.equals( "2kp1") ) {
+				session.findElement(By.xpath("//option[@value='2']")).click();
+			}
+			if ( kp.equals( "2kp2") ) {
+				session.findElement(By.xpath("//option[@value='3']")).click();
+			}
+			if ( kp.equals( "2kp3") ) {
+				session.findElement(By.xpath("//option[@value='4']")).click();
+			}
+			if ( kp.equals( "2kp4") ) {
+				session.findElement(By.xpath("//option[@value='5']")).click();
+			}
+			if ( kp.equals( "2kp5") ) {
+				session.findElement(By.xpath("//option[@value='6']")).click();
+			}
+			if ( kp.equals( "2kp6") ) {
+				session.findElement(By.xpath("//option[@value='7']")).click();
+			}			
+			Thread.sleep(100);
+			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
+			Thread.sleep(100);
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void twokptwo() {
+	/*public void twokptwo() {
 		try {
 			session.findElement(By.xpath("//span[text()='Edit options']")).click();
 			Thread.sleep(100);
@@ -700,7 +1020,7 @@ public class MafiaSession {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public void randomDeck() {
 		try {
@@ -1128,6 +1448,8 @@ public class MafiaSession {
 			Thread.sleep(100);
 			session.findElement(By.xpath("//button[text()='Transfer host' and @type='button']")).click();
 			Thread.sleep(100);
+			session.findElement(By.xpath("//span[text()='Transfer' and @class='button-contents']")).click();
+			Thread.sleep(100);
 			session.findElement(By.xpath("//input")).sendKeys(Keys.ESCAPE);
 			Thread.sleep(100);
 			return true;
@@ -1160,6 +1482,95 @@ public class MafiaSession {
 			}
 		}
 
+	}
+	
+	public void refresh() {
+		try {
+			session.navigate().refresh();
+			Thread.sleep(100);
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void goHome() {
+		try {
+			session.get(URL);
+		} catch (Exception e ) {
+			e.printStackTrace();
+		}
+	}
+
+	public String summoned(String summonPhrase) {
+		try {
+			List<WebElement> rooms = session.findElements(By.xpath("//a[contains( @href, '/game/')]") ); //text()[contains(.,'Hosted')] and 
+			for ( int i = 0; i < rooms.size(); i++ ) {
+				String roomStuff = rooms.get( i ).getAttribute( "innerHTML" );				
+				//System.out.println( rooms.get( i ).getAttribute( "innerHTML" ) );
+				if ( rooms.get( i ).getAttribute( "innerHTML" ).startsWith( "<strong>"+summonPhrase) ) {
+					System.out.print( "Found room: " );
+					String host = roomStuff.split("Hosted by <strong>")[1].split("</strong>")[0];
+					System.out.println( rooms.get( i ).getAttribute( "innerHTML" ) );
+					rooms.get( i ).click();
+					return host;
+				}
+			}			
+			return "";
+		} catch (NoSuchElementException e ) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	public Setup setup(String command) {
+		System.out.println( command );
+		String[] empty = new String[] {};
+		Setup choice = new Setup( "", "", "", 0, "", "", "", "", "", "", "", empty, "" );
+		for (int i = 0; i < setups.size(); i++ )
+		{
+			//System.out.println( setups.get( i ).command );
+			//System.out.println( command );
+			if ( setups.get( i ).command.equals( command ) ) {
+				//System.out.println( "match");
+				choice = setups.get( i );
+			}
+		}
+		if ( choice.name.equals( "" ) ) {
+				return choice;
+		}
+		
+		//System.out.println( "hi");
+		
+		System.out.println( choice );
+		
+		// set start settings		
+		setStart( choice.start );
+		
+		// set role reveal
+		setRR( choice.rr );
+		
+		// set majority vote
+		setMajority( choice.majvote );
+		
+		// set kp
+		setkp( choice.extrakp );
+		
+		// set deadlock
+		setDeadlock( choice.deadlock );
+		
+		// set forcevote
+		setForceVote( choice.forcevote );
+		
+		// set hidden setup off ( hidden prior to game start )
+		setHidden( "off" );
+		
+		// set setup code
+		Random rand = new Random();
+		setSetup( choice.codes[ rand.nextInt( choice.codes.length )] );
+		
+		//System.out.println( choice.command );
+		
+		return choice;		
 	}
 
 	// public void unexpectedClose() {
