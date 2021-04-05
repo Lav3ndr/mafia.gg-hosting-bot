@@ -527,7 +527,11 @@ public class App {
 		} else if (command.startsWith(".setup ") && tempAuthorized) {
 			command = command.replace(".setup ", "");
 			currentSetup = obj.setup( command, currentSetup );
-			obj.changeRoomName(currentSetup.name+autoHostText);
+			String host = "";
+			if ( !autoHost ) {
+				host = tempAuth.get( 0 );
+			}
+			obj.changeRoomName(currentSetup.name+" (hosted by "+ host +")");
 			displayInfo( currentSetup );
 		}
 			/*if (command.equalsIgnoreCase("single")) {
@@ -1672,7 +1676,7 @@ public class App {
 		//boolean gameRunning = false;
 		while (true) {
 			currentSetup = new Setup( "", "", "", 0, "", "", "", "", "", "", "", new String[] {}, "" );
-			waiting = false;
+			waiting = true;
 			//standingBy = true;
 			summoner = "";
 			tempAuth = new ArrayList<String>();
@@ -1756,15 +1760,20 @@ public class App {
 					continue;
 				}
 				// If !autoHost and game running or told to leave, or not host for a while, quit to main lobby
-				if ( !autoHost && ( ( obj.gameRunning() || toldToLeave ) || ( System.nanoTime() - losthosttime ) / 1000000000 > hostPatience ) ){
-					if ( ( System.nanoTime() - losthosttime ) / 1000000000 > hostPatience ) {
+				if ( !autoHost ) {
+					if ( toldToLeave || obj.gameRunning() ) {
+						if ( obj.pregamehosting() ) {
+							obj.giveHost( summoner );							
+						}
+						obj.goHome();
+						break;
+						
+						//|| toldToLeave ) || ( System.nanoTime() - losthosttime ) / 1000000000 > hostPatience ) )
+					}	else if ( !obj.gameRunning() && !obj.pregamehosting() && ( System.nanoTime() - losthosttime ) / 1000000000 > hostPatience  && losthosttime != 0 ) {
 						obj.sendMessage( "Hosting control lost for "+ Long.toString( hostPatience ) + " seconds. Please summon me again if you need me.");
+						obj.goHome();
+						break;
 					}
-					if ( !obj.gameRunning() && obj.pregamehosting() ) {
-						obj.giveHost( summoner );
-					}
-					obj.goHome();	
-					break;
 				}
 				
 				// Update the command queue
@@ -1772,11 +1781,13 @@ public class App {
 				
 				// Check if not hosting, pause and unplayer if so
 				if ( !obj.pregamehosting() ) {
+					
 					if (!waiting) {
+						losthosttime = System.nanoTime();
 						if ( autoHost ) {
 							obj.sendMessage( "Someone else has host. Pausing execution. Return host to continue.");
 						}
-						losthosttime = System.nanoTime();
+						
 					}
 					try {
 						obj.playerDown();

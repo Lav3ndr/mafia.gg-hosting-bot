@@ -1481,7 +1481,6 @@ public class MafiaSession {
 				return true;
 			}
 		}
-
 	}
 	
 	public void refresh() {
@@ -1512,12 +1511,23 @@ public class MafiaSession {
 					String host = roomStuff.split("Hosted by <strong>")[1].split("</strong>")[0];
 					System.out.println( rooms.get( i ).getAttribute( "innerHTML" ) );
 					rooms.get( i ).click();
-					return host;
+					if ( !gameRunning() ) {
+					//	System.out.println( "hi" );
+						return host;						
+					}
+					else {
+						goHome();
+						return "";
+					}					
 				}
 			}			
 			return "";
 		} catch (NoSuchElementException e ) {
 			e.printStackTrace();
+			return "";
+		} catch (StaleElementReferenceException e) {
+			e.printStackTrace();
+			//goHome();
 			return "";
 		}
 	}
@@ -1531,16 +1541,16 @@ public class MafiaSession {
 		{
 			//System.out.println( setups.get( i ).command );
 			//System.out.println( command );
-			if ( setups.get( i ).command.equals( command ) && !setups.get( i ).command.equals( curSetup.command ) ) {
+			if ( setups.get( i ).command.equals( command ) && ( setups.get( i ).hidden.equals( "on" ) || !setups.get( i ).command.equals( curSetup.command ) ) ) {
 				//System.out.println( "match");
 				choice = setups.get( i );
 				newSetup = true;
 			}
 		}
 		if ( !newSetup ) {
-				return choice;
-		}
-		
+			sendMessage( "That setup code is invalid or already the current setup.");			
+			return choice;
+		}		
 		//System.out.println( "hi");
 		
 		System.out.println( choice );
