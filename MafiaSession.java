@@ -23,6 +23,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 
 public class MafiaSession {
@@ -35,6 +36,10 @@ public class MafiaSession {
 	private boolean unlistedMemory;
 	// private String setInUse;
 	// private List<WebElement> chat, usn;
+	
+	private boolean headless = false; // run headless?
+	// noted problems with headless: kicking, passing host
+	// hmm, other issues too. accessing options doesn't seem to work.
 	
 	private List<Setup> setups;	
 	
@@ -241,7 +246,15 @@ public class MafiaSession {
 		
 		this.setups = readSetups();
 		
-		session = new ChromeDriver();
+		
+		if ( headless ) {
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("headless");
+			session = new ChromeDriver(options);
+		} else {
+			session = new ChromeDriver();
+		}			
+		
 		session.manage().window().maximize();
 		session.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		session.get(URL);
@@ -329,8 +342,18 @@ public class MafiaSession {
 		curCodes = listdata[codeIndex].split(",");
 		//System.out.println( listdata[3] );
 		
+		// handle special setups
+		if ( listdata[0].equals( "Spyfall.gg" ) ) { 
+			return specialSetup( listdata );
+		}
+		
 		Setup setup = new Setup( listdata[0], listdata[1], listdata[2], Integer.parseInt( listdata[3] ), listdata[4], listdata[5], listdata[6], listdata[7], listdata[8], listdata[9], listdata[10], curCodes, listdata[12] );
 		return setup;
+	}
+	
+	private Setup specialSetup( String[] setupData ) {
+		// handle special setups like Spyfall
+		return new Setup( "", "", "", 0, "", "", "", "", "", "", "", new String[] {}, "" );
 	}
 
 	public static MafiaSession newSession() {
@@ -535,6 +558,49 @@ public class MafiaSession {
 			// setSetup(setupCode);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void adjRole( String role, int amount, boolean saveafter ) {
+		try {
+			session.findElement(By.xpath("//span[text()='Edit options']")).click();
+			Thread.sleep(100);
+		} catch (NoSuchElementException e) {
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		if ( amount > 0 ) {
+			amount = Integer.min( amount, 99);
+			for ( int i=0; i < amount; i++ ) {
+				try {
+					session.findElement(By.xpath("//button[@aria-label='Add one "+role+"']") ).click();
+					Thread.sleep(100);
+				} catch (NoSuchElementException e) {
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}			
+		}
+		if ( amount < 0 ) {
+			amount = Integer.max( amount, -99);
+			for ( int i=0; i < -amount; i++ ) {
+				try {
+					session.findElement(By.xpath("//button[@aria-label='Subtract one "+role+"']") ).click();
+					Thread.sleep(100);
+				} catch (NoSuchElementException e) {
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}				
+		}
+		if (saveafter) {
+			save();
 		}
 	}
 
@@ -1165,7 +1231,7 @@ public class MafiaSession {
 	// }
 	// }
 
-	public void updateChatSmart(List<List<String>> queue, List<String> last) {
+	public void updateChatSmart(List<List<String>> queue, List<String> last, String startString) {
 		try {
 			List<WebElement> rawChat = session.findElements(By.xpath("//div[@class='game-chronicle-chat']"));
 			List<WebElement> names = session.findElements(By.xpath("//div[@class='game-chronicle-name']"));
@@ -1181,22 +1247,41 @@ public class MafiaSession {
 				cmd.add(toSplit.get(1).substring(namelength));
 				curchat.add(cmd);
 			}
-			boolean queueing = false;
-			if ("".equals(last.get(0)) && "".equals(last.get(1)) && "".equals(last.get(2))) {
-				queueing = true;
+			//boolean queueing = false;
+			
+			int startIndex = curchat.size() - 1;
+			//if ("".equals(last.get(0)) && "".equals(last.get(1)) && "".equals(last.get(2))) {
+			//	queue.add(curchat.get(startIndex));
+			//	return;//queueing = true;
+			//}
+			for (int i = curchat.size() - 1; i >= 0; i--) {
+				//System.out.println( curchat.get(i).get(2) );
+				//System.out.println( curchat.get(i).get(2) );
+				
+				if ( ( curchat.get(i).get(0).equals(last.get(0)) && curchat.get(i).get(1).equals(last.get(1))
+						&& curchat.get(i).get(2).equals(last.get(2)) ) || ( this.username.equals( curchat.get(i).get(1) ) &&  curchat.get(i).get(2).contains( startString ) ) ){
+					startIndex = i+1;
+					break;
+					//queueing = true;
+				}
+				
 			}
-			for (int i = 0; i < curchat.size(); i++) {
+			
+			
+			for (int i = startIndex; i < curchat.size(); i++) {
 				// if ( curchat.get( i ).get( 0 ).compareTo( last.get( 0 ) ) < 0 ){
 				// continue;
 				// }
-				if (curchat.get(i).get(0).equals(last.get(0)) && curchat.get(i).get(1).equals(last.get(1))
+				System.out.println( "queueing"+curchat.get(i));
+				queue.add(curchat.get(i));
+				/*if (curchat.get(i).get(0).equals(last.get(0)) && curchat.get(i).get(1).equals(last.get(1))
 						&& curchat.get(i).get(2).equals(last.get(2))) {
 					queueing = true;
 					continue;
 				}
 				if (queueing) {
 					queue.add(curchat.get(i));
-				}
+				}*/
 			}
 			// System.out.println( curchat );
 		} catch (NoSuchElementException e) {
@@ -1548,7 +1633,7 @@ public class MafiaSession {
 			}
 		}
 		if ( !newSetup ) {
-			sendMessage( "That setup code is invalid or already the current setup.");			
+			sendMessage( "That setup command is invalid or already the current setup. See https://github.com/Lav3ndr/mafia.gg-hosting-bot/blob/main/SETUPS.md for available setup commands.");			
 			return choice;
 		}		
 		//System.out.println( "hi");

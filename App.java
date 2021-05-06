@@ -27,6 +27,7 @@ public class App {
 	private static boolean autoHost = false; // wait to be summoned (false), or host rooms automatically (true)?
 	private static String summonPhrase = ".helphost";
 	private static String summoner = "";
+	private static String welcomeString = ". I joined your room because you started your room name with '.helphost'. I can help you host any of the setups available here: https://github.com/Lav3ndr/mafia.gg-hosting-bot/blob/main/SETUPS.md. Pass host to me to begin.";
 	//private static boolean standingBy = true; // used in helphost mode when waiting for host
 	private static boolean toldToLeave = false;
 	private static long hostPatience = 60;
@@ -163,7 +164,7 @@ public class App {
 	public String castVote( String stp, String usr) {
 		stp = stp.toLowerCase();
 		if (!votes.containsKey( stp )) {
-			return "'" +stp + "' is not a valid setup code, "+usr+"! Type '.help' to see available setup codes.";
+			return "'" +stp + "' is not a valid setup command, "+usr+"! Type '.help' to see available setup codes.";
 		}
 		else if (votes.get( stp ).contains(usr) ) {
 			return "You have already voted for "+ stp + ", "+ usr +"!";
@@ -289,6 +290,7 @@ public class App {
 		else if (command.equalsIgnoreCase(".info")) {
 			if ( currentSetup.name.equals( "" ) ) {
 				obj.sendMessage( "The bot must change the setup at least once in order to use this command." );
+				return;
 			}
 			displayInfo( currentSetup );
 		}
@@ -302,70 +304,6 @@ public class App {
 		else if (command.equalsIgnoreCase(".credits")) {
 			obj.sendMessage( "This bot was programmed in Java by Lavender (Lavender#8704 on Discord), though the original code was written and given to him by someone else. It uses a library called Selenium (https://www.selenium.dev/) to open a browser and interact with it by referencing the source html. Poorly-documented source code available here: https://github.com/Lav3ndr/mafia.gg-hosting-bot");			
 		}
-		else if (command.equalsIgnoreCase(".garbageman")) {
-			obj.sendMessage("gotta figure out how to get off my butt and work on my real side projects");
-		}
-		else if (command.equalsIgnoreCase(".xinde")) {
-			obj.sendMessage(".deck Love Live");
-		}
-		else if (command.equalsIgnoreCase(".auryxx")) {
-			obj.sendMessage(".xinde");
-		}
-		else if (command.equalsIgnoreCase(".hockeyfan123")) {
-			obj.sendMessage("doesn't even like hockey");
-		}
-		else if (command.equalsIgnoreCase(".samthewhale")) {
-			obj.sendMessage("not actually a whale?");
-		}
-		else if (command.equalsIgnoreCase(".lavender")) {
-			obj.sendMessage("hath no more brain than stone");
-		}
-		else if (command.equalsIgnoreCase(".1612")) {
-			obj.sendMessage("wholesome <3");
-		}
-		else if (command.equalsIgnoreCase(".khs131")) {
-			obj.sendMessage("good player");
-		}
-		else if (command.equalsIgnoreCase(".stimilant")) {
-			obj.sendMessage("plays conplan with the wrong settings but i forgive him");
-		}
-		else if (command.equalsIgnoreCase(".ericmw")) {
-			obj.sendMessage("went out for milk and never came back");
-		}
-		else if (command.equalsIgnoreCase(".reshoe7777777")) {
-			obj.sendMessage("kangaroo emoji");
-		}
-		else if (command.equalsIgnoreCase(".hitoshisuki")) {
-			obj.sendMessage("always town");
-		}
-		else if (command.equalsIgnoreCase(".chiccpea")) {
-			obj.sendMessage("chick emoji can emoji");
-		}
-		else if (command.equalsIgnoreCase(".wangalang")) {
-			obj.sendMessage("wang emoji");
-		}
-		else if (command.equalsIgnoreCase(".getdropkicked")) {
-			obj.sendMessage("gdk pog");
-		}
-		else if (command.equalsIgnoreCase(".bruhmoments")) {
-			obj.sendMessage("taught me everything i know");
-		}
-		else if (command.equalsIgnoreCase(".michael")) {
-			obj.sendMessage("i miss michael");
-		}
-		else if (command.equalsIgnoreCase(".akiak")) {
-			obj.sendMessage("i miss akiak");
-		}
-		else if (command.equalsIgnoreCase(".iruncursebidoof")) {
-			obj.sendMessage("legend");
-		}
-		else if (command.equalsIgnoreCase(".meteornate")) {
-			obj.sendMessage("meteor emoji nate emoji");
-		}
-		else if (command.equalsIgnoreCase(".froggo43")) {
-			obj.sendMessage("dm me froggo memes i can't think of any");
-		}
-		
 		else if (command.equals(".time")) {
 			int toStart = toStart();
 			if ( toStart != 0 ){
@@ -532,7 +470,19 @@ public class App {
 				host = tempAuth.get( 0 );
 			}
 			obj.changeRoomName(currentSetup.name+" (hosted by "+ host +")");
-			displayInfo( currentSetup );
+			if ( !currentSetup.name.equals( "" ) ) {
+				displayInfo( currentSetup );
+			}
+		} else if (command.startsWith( ".roles ") && authorized ) {
+			String[] params = command.replace( ".roles ", "").split("\\s+",2);
+			try {
+				obj.adjRole( params[1], Integer.parseInt( params[0] ), true);
+				//int amt = Integer.parseInt( params[0] );
+				
+			} catch (NumberFormatException e) {
+				//e.printStackTrace();
+				obj.sendMessage(e.getMessage());
+			}
 		}
 			/*if (command.equalsIgnoreCase("single")) {
 				currentSetup = "single";
@@ -1777,7 +1727,7 @@ public class App {
 				}
 				
 				// Update the command queue
-				obj.updateChatSmart( chatQueue, lastInLine );
+				obj.updateChatSmart( chatQueue, lastInLine, welcomeString );
 				
 				// Check if not hosting, pause and unplayer if so
 				if ( !obj.pregamehosting() ) {
@@ -1899,7 +1849,7 @@ public class App {
 	}
 
 	private void greet(String summoner) {
-		obj.sendMessage( "Hello " + summoner + ". I joined your room because you started your room name with '.helphost'. I can help you host any of the setups available here: https://github.com/Lav3ndr/mafia.gg-hosting-bot/blob/main/SETUPS.md. Pass host to me to begin." );
+		obj.sendMessage( "Hello " + summoner + welcomeString );
 	}
 	
 	private void hostHelp2( String summoner ) {
