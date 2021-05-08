@@ -42,6 +42,7 @@ public class MafiaSession {
 	// hmm, other issues too. accessing options doesn't seem to work.
 	
 	private List<Setup> setups;	
+	public List<String> specials = Arrays.asList( "Spyfall.gg" );
 	
 	/*
 	public static final int TWO_THIRDS_MAJORITY = 66;
@@ -343,17 +344,23 @@ public class MafiaSession {
 		//System.out.println( listdata[3] );
 		
 		// handle special setups
-		if ( listdata[0].equals( "Spyfall.gg" ) ) { 
-			return specialSetup( listdata );
+		if ( specials.contains( listdata[0] ) ) { 
+			return specialSetup( listdata, curCodes );
 		}
 		
 		Setup setup = new Setup( listdata[0], listdata[1], listdata[2], Integer.parseInt( listdata[3] ), listdata[4], listdata[5], listdata[6], listdata[7], listdata[8], listdata[9], listdata[10], curCodes, listdata[12] );
 		return setup;
 	}
 	
-	private Setup specialSetup( String[] setupData ) {
+	private Setup specialSetup( String[] setupData, String[] roleData ) {
 		// handle special setups like Spyfall
-		return new Setup( "", "", "", 0, "", "", "", "", "", "", "", new String[] {}, "" );
+		if ( setupData[0].equals( "Spyfall.gg") ) {
+			return new Setup( setupData[0], "spyfall", setupData[2], 0, "", setupData[5], "", setupData[7], "", setupData[9], setupData[10], roleData, "" );
+		}
+		else {
+			return new Setup( "", "", "", 0, "", "", "", "", "", "", "", new String[] {}, "" );
+		}	
+		
 	}
 
 	public static MafiaSession newSession() {
@@ -539,18 +546,24 @@ public class MafiaSession {
 		}
 	}
 
-	public void setSetup(String setupCode) {
+	public void setSetup(String setupCode, boolean saveafter) {
 		try {
 			session.findElement(By.xpath("//span[text()='Edit options']")).click();
 			Thread.sleep(100);
-
+		} catch (NoSuchElementException e) {
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		try {
 			session.findElement(By.xpath("//input[@placeholder='Paste setup code…']"))
 					.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
 
 			// System.out.println( "Deleted");
 			session.findElement(By.xpath("//input[@placeholder='Paste setup code…']")).sendKeys(setupCode);
 			// Thread.sleep(100);
-			session.findElement(By.xpath("//span[text()='Save']")).click();
+			//session.findElement(By.xpath("//span[text()='Save']")).click();
 			// Thread.sleep(100);
 		} catch (NoSuchElementException e) {
 			e.printStackTrace();
@@ -558,6 +571,9 @@ public class MafiaSession {
 			// setSetup(setupCode);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		if (saveafter) {
+			save();
 		}
 	}
 	
@@ -1619,6 +1635,11 @@ public class MafiaSession {
 
 	public Setup setup(String command, Setup curSetup) {
 		System.out.println( command );
+		
+		if ( command.startsWith( "spyfall") ) {
+			return specialSetup( command, curSetup);
+		}		
+		
 		//String[] empty = new String[] {};
 		Setup choice = curSetup;
 		boolean newSetup = false;
@@ -1659,16 +1680,112 @@ public class MafiaSession {
 		setForceVote( choice.forcevote );
 		
 		// set hidden setup off ( hidden prior to game start )
-		setHidden( "off" );
+		setHidden( choice.hidden );
 		
 		// set setup code
 		Random rand = new Random();
-		setSetup( choice.codes[ rand.nextInt( choice.codes.length )] );
+		setSetup( choice.codes[ rand.nextInt( choice.codes.length )], true );
 		
 		//System.out.println( choice.command );
 		
 		return choice;		
 	}
+	
+	public Setup specialSetup(String command, Setup curSetup) {
+		Setup choice = curSetup;
+		if ( command.startsWith( "spyfall") ) {
+			for (int i = 0; i < setups.size(); i++ )
+			{
+				//System.out.println( setups.get( i ).command );
+				//System.out.println( command );
+				if ( setups.get( i ).command.startsWith( "spyfall" ) ) {
+					choice = setups.get( i );
+				}
+			}
+			Random rand = new Random();
+			String secretRoleRaw = choice.codes[ rand.nextInt( choice.codes.length )];
+			String secretRole = secretRoleRaw.replace( "*", "");
+			Integer numPlayers;
+			try {
+				numPlayers = Integer.parseInt( command.replace( "spyfall ", "" ) );
+				System.out.println( "hi" );
+			} catch ( Exception e ) {
+				e.printStackTrace();
+				sendMessage( "That setup command is invalid or already the current setup. See https://github.com/Lav3ndr/mafia.gg-hosting-bot/blob/main/SETUPS.md for available setup commands.");	
+				return curSetup;
+			}
+			if ( numPlayers < 3 || numPlayers > 7 ) {
+				sendMessage( "Spyfall.gg player count must be between 3 and 7.");	
+				return curSetup;
+			}
+			
+			
+			
+			
+			// set start settings
+			if ( numPlayers <= 7 ) {
+				setStart( "uninformed day" );
+			}
+			else {
+				setStart( "informed day" );
+			}			
+			
+			// set role reveal
+			setRR( choice.rr );
+			
+			// set majority vote
+			setMajority( choice.majvote );
+			
+			// set kp
+			if( Arrays.asList( 7,6,4 ).contains( numPlayers ) ) {
+				// set kp
+				setkp( "always" );
+			}
+			else {
+				setkp( "off" );
+			}
+			
+			// set deadlock
+			setDeadlock( choice.deadlock );
+			
+			// set forcevote
+			
+			if ( numPlayers == 7 ) {
+				setForceVote( "on" );
+			}
+			else {
+				setForceVote( "off" );
+			}
+			
+			// hide setup
+			setHidden( choice.hidden );
+			
+			// make setup
+			setSetup( "", false );
+			// add mafia
+			if ( Arrays.asList( 3,4 ).contains( numPlayers ) ) {
+				// set kp
+				adjRole( "Mafia", 1, false );
+			}
+			else if ( Arrays.asList( 5,6,7 ).contains( numPlayers ) ) {
+				// set kp
+				adjRole( "Kingpin", 1, false );
+			}
+			
+			// add town			
+			if ( numPlayers <= 7 ) {
+				adjRole( secretRole, numPlayers - 1, true);
+			}			
+			
+			return choice;
+		}
+		else {
+			return curSetup;
+		}
+		
+		// set up a special setup like spyfall
+	}
+	
 
 	// public void unexpectedClose() {
 	// try {
