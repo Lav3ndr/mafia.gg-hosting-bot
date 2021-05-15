@@ -565,10 +565,10 @@ public class App {
 	
 	public static void displayInfo( Setup cur ) {
 		String msg = "This setup is called " + cur.name + ". Read about it here: " + cur.url;
-		if ( !cur.notes.equals( "" ) ) {
-			msg = msg + ". " + cur.notes;
-		}
 		obj.sendMessage(msg);
+		if ( !cur.notes.equals( "" ) ) {
+			obj.sendMessage( cur.notes );
+		}		
 	}
 
  

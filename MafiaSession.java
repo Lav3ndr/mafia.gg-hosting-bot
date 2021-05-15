@@ -355,7 +355,7 @@ public class MafiaSession {
 	private Setup specialSetup( String[] setupData, String[] roleData ) {
 		// handle special setups like Spyfall
 		if ( setupData[0].equals( "Spyfall.gg") ) {
-			return new Setup( setupData[0], "spyfall", setupData[2], 0, "", setupData[5], "", setupData[7], "", setupData[9], setupData[10], roleData, "" );
+			return new Setup( setupData[0], "spyfall", setupData[2], 0, "", setupData[5], "", setupData[7], "", setupData[9], setupData[10], roleData, "Roles: "+setupData[11].replace("*", "") );
 		}
 		else {
 			return new Setup( "", "", "", 0, "", "", "", "", "", "", "", new String[] {}, "" );
